@@ -166,7 +166,7 @@ export default {
       let _this = this;
       cfg.getAccountStakedStatus(
         function (res) {
-          console.log(res)
+          console.log(res);
           _this.staked_flag = res == "0" ? false : true;
         },
         function () {
@@ -201,21 +201,27 @@ export default {
     // 获取盈利余额
     get_bonus_value() {
       let _this = this;
+      _this.get_bonus_value_fn();
       _this.timer = setTimeout(() => {
-        cfg.getEarned(
-          window.accountAddress,
-          function (res) {
-            if (res * 1 > 0) {
-              _this.bonus_value = _this.calc_show_num(res, 10);
-            } else _this.bonus_value = "0.0000";
-          },
-          function (err) {}
-        );
+        _this.get_bonus_value_fn();
         if (_this.timer) {
           clearTimeout(_this.timer);
         }
         _this.get_bonus_value();
       }, 3000);
+    },
+    // 查询盈利余额
+    get_bonus_value_fn() {
+      let _this = this;
+      cfg.getEarned(
+        window.accountAddress,
+        function (res) {
+          if (res * 1 > 0) {
+            _this.bonus_value = _this.calc_show_num(res, 10);
+          } else _this.bonus_value = "0.0000";
+        },
+        function (err) {}
+      );
     },
     // 获取抵押的LP
     get_pool_value() {

@@ -140,15 +140,15 @@ export default {
           );
         });
         // 解押
-        cfg.withdrawFromHuiwanUsdtLoopContract(
-          "499999999999000",
-          function (res) {
-            console.log(res);
-          },
-          function (res) {
-            console.log(res);
-          }
-        );
+        // cfg.withdrawFromHuiwanUsdtLoopContract(
+        //   "499999999999000",
+        //   function (res) {
+        //     console.log(res);
+        //   },
+        //   function (res) {
+        //     console.log(res);
+        //   }
+        // );
       });
     },
     choose_click(){

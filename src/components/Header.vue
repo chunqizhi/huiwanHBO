@@ -34,32 +34,31 @@
 
 <script>
 import cfg from "@/apis/nodeServer.js";
-import { huiwanUsdtMdexAddr } from "@/apis/token.js";
 export default {
   // inject: ["reload"],
   data() {
     return {
       nav_list: [
-        {
-          text: "header.nav01",
-          path: "/home",
-          desc: "",
-        },
+        // {
+        //   text: "header.nav01",
+        //   path: "/home",
+        //   desc: "",
+        // },
         {
           text: "header.nav02",
           path: "/pool_index",
           desc: "header.desc01",
         },
-        {
-          text: "header.nav03",
-          path: "/info",
-        },
+        // {
+        //   text: "header.nav03",
+        //   path: "/info",
+        // },
       ],
       current_router: "",
       mune_flag: false,
       pool_desc: {
         "/pool_detail": "header.desc01",
-        pool_index: "header.desc02",
+        "/pool_index": "header.desc02",
       },
       account: "",
     };

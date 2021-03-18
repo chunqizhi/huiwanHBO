@@ -9,7 +9,7 @@ FastClick.attach(document.body);
 rem()
 Vue.config.productionTip = false
 
-
+import './apis/index'
 import {
   Icon,
   Popover,

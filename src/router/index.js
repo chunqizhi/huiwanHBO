@@ -12,7 +12,7 @@ const routes = [
 	{
 		path: '/',
 		name: 'Html',
-		redirect:'/home'
+		redirect:'/pool_index'
 	},
 	{
 		path: '/home',
