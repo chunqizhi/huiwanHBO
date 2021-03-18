@@ -46,7 +46,7 @@
 
 <script>
 
-import cfg from "@/apis/nodeServer.js";
+import cfg from "@/apis/cfg.js";
 
 
 export default {

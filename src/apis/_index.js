@@ -1,5 +1,5 @@
 import Web3 from "web3";
-
+import { BigNumber } from "bignumber.js";
 class Contract {
     constructor(options) {
         // addr
@@ -7,17 +7,19 @@ class Contract {
         this.huiwanTokenAddr = options.huiwanTokenAddr
         this.usdtTokenAddr = options.usdtTokenAddr
         this.huiwanUsdtMdexAddr = options.huiwanUsdtMdexAddr
+        this.huiwanSinglePoolAddr=options.huiwanSinglePoolAddr
         // 合约abi
         this.huiwanUsdtLoopABI = options.huiwanUsdtLoopABI
         this.huiwanTokenABI = options.huiwanTokenABI
         this.usdtTokenABI = options.usdtTokenABI
         this.huiwanUsdtMdexABI = options.huiwanUsdtMdexABI
+        this.huiwanSinglePoolABI=options.huiwanSinglePoolABI
         // 合约对象
         this.huiwanUsdtLoopContract = null
         this.huiwanTokenContract = null
         this.usdtTokenContract = null
         this.huiwanUsdtMdexContract = null
-        
+        this.huiwanSinglePoolContract=null
 
     }
     // 初始化
@@ -45,7 +47,7 @@ class Contract {
                     window.web3 = new Web3(ethereum);
                     // 创建合约
                     //
-                    _this.huiwanUsdtLoopContract = new web3.eth.Contract(_this.huiwanUsdtLoopABI, _this.huiwanUsdtLoopAddr);
+                    _this.huiwanU2sdtLoopContract = new web3.eth.Contract(_this.huiwanUsdtLoopABI, _this.huiwanUsdtLoopAddr);
                     //
                     _this.huiwanTokenContract = new web3.eth.Contract(_this.huiwanTokenABI, _this.huiwanTokenAddr);
                     //
@@ -53,7 +55,8 @@ class Contract {
                     //
                     _this.huiwanUsdtMdexContract = new web3.eth.Contract(_this.huiwanUsdtMdexABI, _this.huiwanUsdtMdexAddr);
                     //
-                    //
+                    _this.huiwanSinglePoolContract =  new web3.eth.Contract(_this.huiwanSinglePoolABI, _this.huiwanSinglePoolAddr);
+                    
                     window.accountAddress = accounts[0];
                     callback(accounts[0]);
                 });
@@ -62,7 +65,7 @@ class Contract {
 
     // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
     getInitreward(callback, errorCallBack) {
-        this.huiwanUsdtLoopContract.methods
+        this.huiwanSinglePoolContract.methods
             .initreward()
             .call(function (error, res) {
                 if (error) {
@@ -75,8 +78,8 @@ class Contract {
 
     // 查询用户是否授权
     getAccountStakedStatus(callback, errorCallBack) {
-        this.huiwanUsdtMdexContract.methods
-            .allowance(window.accountAddress, this.huiwanUsdtLoopAddr)
+        this.huiwanTokenContract.methods
+            .allowance(window.accountAddress, this.huiwanSinglePoolAddr)
             .call(function (error, res) {
                 if (error) {
                     errorCallBack && errorCallBack(handleError(error));
@@ -89,7 +92,7 @@ class Contract {
 
     // 查询项目方 huiwanUsdtLoop 池子里面的 lp 总数量
     getTotalSupply(callback, errorCallBack) {
-        this.huiwanUsdtLoopContract.methods
+        this.huiwanSinglePoolContract.methods
             .totalSupply()
             .call(function (error, res) {
                 if (error) {
@@ -102,7 +105,7 @@ class Contract {
 
     // 查询某个用户在 huiwanUsdtLoop 池子中的当前收益
     getEarned(account, callback, errorCallBack) {
-        this.huiwanUsdtLoopContract.methods
+        this.huiwanSinglePoolContract.methods
             .earned(account)
             .call(function (error, res) {
                 if (error) {
@@ -150,7 +153,7 @@ class Contract {
 
     // 在 mdex 配对合约中获取我的 lp 数量
     getBalanceFromhuiwanUsdtMdexContract(account, callback, errorCallBack) {
-        this.huiwanUsdtMdexContract.methods
+        this.huiwanTokenContract.methods
             .balanceOf(account)
             .call(function (error, res) {
                 if (error) {
@@ -163,15 +166,15 @@ class Contract {
 
     // 抵押 lp 到 huiwanUsdtLoop 池子
     stakingToHuiwanUsdtLoopContract(amount, callback, errorCallBack) {
-        let data = this.huiwanUsdtLoopContract.methods
+        let data = this.huiwanSinglePoolContract.methods
             .stake(amount)
             .encodeABI();
-        this.sendTransfer(window.accountAddress, this.huiwanUsdtLoopAddr, data, callback, errorCallBack);
+        this.sendTransfer(window.accountAddress, this.huiwanSinglePoolAddr, data, callback, errorCallBack);
     }
 
     // 查询某个用户在 huiwanUsdtLoop 池子中的余额
     getBalanceFromHuiwanUsdtLoopContract(account, callback, errorCallBack) {
-        this.huiwanUsdtLoopContract.methods
+        this.huiwanSinglePoolContract.methods
             .balanceOf(account)
             .call(function (error, res) {
                 if (error) {
@@ -184,16 +187,16 @@ class Contract {
 
     // 解押
     withdrawFromHuiwanUsdtLoopContract(amount, callback, errorCallBack) {
-        let data = this.huiwanUsdtLoopContract.methods
+        let data = this.huiwanSinglePoolContract.methods
             .withdraw(amount)
             .encodeABI();
-        this.sendTransfer(window.accountAddress, this.huiwanUsdtLoopAddr, data, callback, errorCallBack);
+        this.sendTransfer(window.accountAddress, this.huiwanSinglePoolAddr, data, callback, errorCallBack);
     }
 
 
     // 查询某个用户在 huiwanUsdtLoop 池子中的当前LP余额
     getPoolLP(account, callback, errorCallBack) {
-        this.huiwanUsdtLoopContract.methods
+        this.huiwanSinglePoolContract.methods
             .balanceOf(account)
             .call(function (error, res) {
                 if (error) {

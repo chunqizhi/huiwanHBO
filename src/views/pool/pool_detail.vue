@@ -24,7 +24,7 @@
         <li class="detail-li">
           <h4>{{ $t("pool.text09") }}</h4>
           <div class="desc-div">
-            <p class="desc">TT-USDT-LP</p>
+            <p class="desc">{{current_pool_name}}</p>
           </div>
           <p>
             <span>{{ pool_value }}</span>
@@ -84,8 +84,8 @@
 
 
 <script>
-import cfg from "@/apis/nodeServer.js";
-import _ from "lodash";
+import cfg from "@/apis/cfg.js";
+import spg from "@/apis/spg.js";
 export default {
   data() {
     return {
@@ -108,6 +108,9 @@ export default {
       current_type: "withdraw",
       timer: null, //查询收益余额定时器
       deal_timer: null, //查询交易定时器
+
+      current_pool: null,
+      current_pool_name:''
     };
   },
   computed: {
@@ -120,20 +123,20 @@ export default {
   },
   watch: {
     value1(current, pre) {
-      console.log(this.current_type, current);
       switch (this.current_type) {
         case "withdraw":
           if (current * 1 >= this.pool_un_value * 1) {
             this.value1 = this.pool_un_value;
+            
           }
-          this.pool_deal_value = this.value1 * Math.pow(10, 18);
+          this.pool_deal_value = this.value1 * Math.pow(10, 18)+'';
           break;
         // 抵押
         case "stake":
           if (current * 1 >= this.mdex_un_value * 1) {
             this.value1 = this.mdex_un_value;
           }
-          this.mdex_deal_value = this.value1 * Math.pow(10, 18);
+          this.mdex_deal_value = this.value1 * Math.pow(10, 18)+'';
           break;
       }
     },
@@ -141,6 +144,7 @@ export default {
   methods: {
     //  获取所有token/解押点击
     btn_click(type) {
+       let _this = this
       if (this.staked_flag) {
         if (type == "mask") {
           // 有抵押的LP
@@ -151,7 +155,7 @@ export default {
           return;
         }
       } else {
-        cfg.approveHuiwanUsdtLoopAddr(
+        _this.current_pool.approveHuiwanUsdtLoopAddr(
           function () {
             console.log("success");
           },
@@ -164,12 +168,12 @@ export default {
     //是否授权过
     calc_staked_flag() {
       let _this = this;
-      cfg.getAccountStakedStatus(
+      _this.current_pool.getAccountStakedStatus(
         function (res) {
-          console.log(res);
+          console.log(res)
           _this.staked_flag = res == "0" ? false : true;
         },
-        function () {
+        function (err) {
           _this.staked_flag = false;
         }
       );
@@ -213,7 +217,7 @@ export default {
     // 查询盈利余额
     get_bonus_value_fn() {
       let _this = this;
-      cfg.getEarned(
+      _this.current_pool.getEarned(
         window.accountAddress,
         function (res) {
           if (res * 1 > 0) {
@@ -226,7 +230,7 @@ export default {
     // 获取抵押的LP
     get_pool_value() {
       let _this = this;
-      cfg.getPoolLP(
+      _this.current_pool.getPoolLP(
         window.accountAddress,
         function (res) {
           if (res * 1 > 0) {
@@ -268,8 +272,8 @@ export default {
     // 确认解押
     withdraw_fn() {
       let _this = this;
-      cfg.withdrawFromHuiwanUsdtLoopContract(
-        _this.pool_un_value,
+      _this.current_pool.withdrawFromHuiwanUsdtLoopContract(
+        _this.pool_deal_value,
         function (res) {
           if (res) {
             _this.check_deal(res);
@@ -283,7 +287,7 @@ export default {
     // 确认抵押
     stake_fn() {
       let _this = this;
-      cfg.stakingToHuiwanUsdtLoopContract(
+      _this.current_pool.stakingToHuiwanUsdtLoopContract(
         _this.mdex_deal_value,
         function (res) {
           if (res) {
@@ -298,7 +302,7 @@ export default {
     // 获取未抵押的LP
     get_un_lp() {
       let _this = this;
-      cfg.getBalanceFromhuiwanUsdtMdexContract(
+      _this.current_pool.getBalanceFromhuiwanUsdtMdexContract(
         window.accountAddress,
         function (res) {
           _this.mdex_value = _this.calc_show_num(res, 10);
@@ -330,8 +334,9 @@ export default {
       }, 1000);
     },
     get_deal_by_hash(hash) {
+      let _this = this
       return new Promise((resolve, reject) => {
-        cfg.getDealStatusByHash(hash, function (err, res) {
+        _this.current_pool.getDealStatusByHash(hash, function (err, res) {
           if (res) {
             resolve(res);
           } else {
@@ -340,6 +345,14 @@ export default {
         });
       });
     },
+  },
+  created() {
+    this.current_pool_name= this.$route.query.token 
+    if (this.$route.query.token == "TT-USDT_LP") {
+      this.current_pool = cfg;
+    } else if (this.$route.query.token == "HBO") {
+      this.current_pool = spg;
+    }
   },
   mounted() {
     this.calc_staked_flag();
