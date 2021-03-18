@@ -1,0 +1,82 @@
+.header-box {
+    height: 3.37rem;
+    background: url('../../image/banner.png') no-repeat 50%/cover;
+    position: relative;
+}
+
+.header {
+    height: .6rem;
+    display: flex;
+    align-items: center;
+    color: #FFF;
+    font-size: 14px;
+    padding: 0 .1rem;
+}
+
+.header-logo {
+    width: .92rem;
+}
+
+.list-ul {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: .3rem;
+
+    .list-li {}
+}
+
+// 中间三个导航栏的样式
+.nav-ul {
+    height: .4rem;
+    box-shadow: 0 0 5px #fff;
+    margin-left: 0;
+    transition: all .3s;
+    .empty-li {
+        flex: 1;
+    }
+
+    .nav-li {
+        color: #FFF;
+        margin-right: .2rem;
+    }
+
+    .nav-li.active {
+        color: #616af0;
+    }
+}
+
+// 右侧三个按钮
+.btn-li {
+    height: .28rem;
+    line-height: .28rem;
+    align-items: center;
+    background-color: #fff;
+    color: #616af0;
+    border-radius: .08rem;
+    font-size: .12rem;
+    text-align: center;
+    padding: 0 .08rem;
+    margin: 0 .05rem;
+    border: 1px solid #fff;
+
+}
+
+
+.btn-li.lang-btn {
+    background: none;
+    font-size: 16px;
+}
+
+// 中间文字
+.header-desc {
+    font-size: .28rem;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    top:60%;
+    transform: translateY(-50%);
+    padding: 0 .1rem;
+}
