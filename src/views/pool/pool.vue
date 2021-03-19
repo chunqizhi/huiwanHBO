@@ -229,6 +229,11 @@ export default {
       }, 3000);
     });
   },
+  // before
+  beforerouteleave(){
+     this.lp_timer && clearTimeout(this.lp_timer);
+    this.tt_timer && clearTimeout(this.tt_timer);
+  },
   beforeDestroy() {
     this.lp_timer && clearTimeout(this.lp_timer);
     this.tt_timer && clearTimeout(this.tt_timer);

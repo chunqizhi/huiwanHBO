@@ -144,10 +144,10 @@ class Contract {
 
     // 授权 huiwanUsdtLoop 池子合约可以帮我在 mdex 配对合约花费我的 100000000 个 lp 份额
     approveHuiwanUsdtLoopAddr(callback, errorCallBack) {
-        let data = this.huiwanUsdtMdexContract.methods
-            .approve(this.huiwanUsdtLoopAddr, web3.utils.toWei("100000000"))
+        let data = this.huiwanTokenContract.methods
+            .approve(this.huiwanSinglePoolAddr, web3.utils.toWei("100000000"))
             .encodeABI();
-        this.sendTransfer(window.accountAddress, this.huiwanUsdtMdexAddr, data, callback, errorCallBack);
+        this.sendTransfer(window.accountAddress, this.huiwanTokenAddr, data, callback, errorCallBack);
     }
 
     // 在 mdex 配对合约中获取我的 lp 数量
