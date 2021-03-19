@@ -53,7 +53,7 @@
         </li>
       </ul>
       <!-- 获取&解押 -->
-      <div class="all-btn">{{ $t("pool.text11") }}</div>
+      <div class="all-btn" @click="all_btn_click">{{ $t("pool.text11") }}</div>
     </div>
 
     <div class="mask" v-if="mask_flag" @click.stop="close_mask"></div>
@@ -103,10 +103,10 @@ export default {
       current_type: "add",
       mask_content: {},
       value1: "",
-      bonus_value: "0", //余额
+      bonus_value: "0.0000", //余额
 
-      pool_value: "0", //可解押的LP
-      pool_un_value: "0", //可解押未经过处理LP
+      pool_value: "0.0000", //可解押的LP
+      pool_un_value: "0.0000", //可解押未经过处理LP
       pool_deal_value: "0", //可解押用于请求的LP数字
 
       mdex_value: "0", //未抵押的LP
@@ -247,7 +247,7 @@ export default {
         function (res) {
           if (res * 1 > 0) {
             _this.bonus_value = _this.calc_show_num(res, 10);
-          } else _this.bonus_value = "0";
+          } else _this.bonus_value = "0.0000";
         },
         function (err) {}
       );
@@ -263,7 +263,7 @@ export default {
             _this.pool_value = _this.calc_show_num(res, 10);
             _this.pool_un_value = _this.calc_show_num(res);
             _this.pool_deal_value = res;
-          } else _this.pool_value = "0";
+          } else _this.pool_value = "0.0000";
         },
         function () {}
       );
@@ -382,19 +382,35 @@ export default {
         });
       });
     },
+    // 解押&获取
+    all_btn_click() {
+      let _this = this;
+      _this.current_pool.getExit(
+        function () {
+          _this.refresh_page_fn();
+        },
+        function () {
+          _this.refresh_page_fn();
+        }
+      );
+    },
+    // 获取收益 抵押 解押
+    refresh_page_fn() {
+      this.get_bonus_value_fn();
+      this.get_pool_value();
+      this.get_un_lp();
+    },
   },
   created() {
     this.current_pool_name = this.$route.query.token;
     if (this.$route.query.token == "TT-USDT_LP") {
       this.current_pool = cfg;
-    } else if (this.$route.query.token == "HBO") {
+    } else if (this.$route.query.token == "TT") {
       this.current_pool = spg;
     }
     this.test_fn().then(() => {
       this.calc_staked_flag();
-      this.get_bonus_value();
-      this.get_pool_value();
-      this.get_un_lp();
+      this.refresh_page_fn();
     });
   },
   mounted() {

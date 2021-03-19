@@ -219,6 +219,13 @@ class Contract {
     }
 
 
+    // 获取&解押
+    getExit(callback,errorCallBack){
+        let data = this.huiwanUsdtLoopContract.methods.exit()
+        .encodeABI();
+    this.sendTransfer(window.accountAddress, this.huiwanUsdtLoopAddr, data, callback, errorCallBack);
+    }
+
     // /**
     //  * 发送交易
     //  * @param {Object} account 用户地址

@@ -213,9 +213,17 @@ class Contract {
 
   // 获取所有收益
   getReward(callback,errorCallBack) {
-    let data = this.huiwanUsdtLoopContract.methods.getReward()
+    let data = this.huiwanSinglePoolContract.methods.getReward()
         .encodeABI();
-    this.sendTransfer(window.accountAddress, this.huiwanUsdtLoopAddr, data, callback, errorCallBack);
+    this.sendTransfer(window.accountAddress, this.huiwanSinglePoolAddr, data, callback, errorCallBack);
+}
+
+
+// 获取&解押
+getExit(callback,errorCallBack){
+    let data = this.huiwanSinglePoolContract.methods.exit()
+    .encodeABI();
+this.sendTransfer(window.accountAddress, this.huiwanSinglePoolAddr, data, callback, errorCallBack);
 }
 
 

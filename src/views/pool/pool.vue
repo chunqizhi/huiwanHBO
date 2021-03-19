@@ -77,10 +77,11 @@ export default {
           coin: "TT",
           day: "",
           mounth: "",
-          query: "HBO",
+          query: "TT",
           pre_coin: "",
           next_coin: "",
           coin_name: "TT",
+           apy:''
         },
       ],
     };
@@ -166,6 +167,10 @@ export default {
         spg.getTotalSupply(function (res) {
           console.log("当前池子 lp 总量：" + res);
             let total = res / 1000000000000000000;
+            if(total ==0)  {
+              that.token_list[1].apy=`0.00%`
+              return
+            }
           that.token_list[1].apy =( (that.token_list[1].day/total)*360*100).toFixed(2)+'%'
         });
         // 查询某个用户在 huiwanUsdtLoop 池子中的当前收益
