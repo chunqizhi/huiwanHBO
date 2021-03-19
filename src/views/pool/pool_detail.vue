@@ -15,7 +15,11 @@
           </p>
           <!-- 按钮 -->
           <div class="staked-box">
-            <div class="detail-btn" @click="btn_click('reward')">
+            <div
+              class="detail-btn"
+              :class="[bonus_value * 1 > 0 ? 'active' : '']"
+              @click="btn_click('reward')"
+            >
               {{ $t("pool.text08") }}
             </div>
           </div>
@@ -53,10 +57,13 @@
         </li>
       </ul>
       <!-- 获取&解押 -->
-      <div class="all-btn" @click="all_btn_click">{{ $t("pool.text11") }}</div>
+      <div 
+       class="all-btn"
+        @click="all_btn_click"
+        >{{ $t("pool.text11") }}</div>
     </div>
 
-    <div class="mask" v-if="mask_flag" @click.stop="close_mask"></div>
+    <div class="mask"  v-if="mask_flag" @click.stop="close_mask"></div>
 
     <van-dialog
       show-cancel-button
@@ -207,7 +214,7 @@ export default {
       this.value1 = "";
     },
     add_staked() {
-      if (this.mdex_value * 1 == 0) return;
+      // if (this.mdex_value * 1 == 0) return;
       this.mask_flag = true;
       this.current_type = "stake"; //当前状态为抵押
     },

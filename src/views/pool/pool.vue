@@ -2,7 +2,10 @@
   <div class="home-div">
     <div>
       <div class="home-all">
-        <div class="all-desc">{{ $t("pool.text01") }}0.00 USDT</div>
+        <!-- {{ $t("pool.text01") }}0.00 USDT -->
+        <div class="all-desc">
+          <div class="all-text">{{ $t("pool.text01") }}: USDT:{{calc_total}}</div>
+        </div>
       </div>
       <div>
         <ul class="coin-ul">
@@ -28,7 +31,9 @@
               <h4>{{ $t("pool.text06") }}</h4>
               <span>{{ item.pre_coin }} {{ item.coin_name }}</span
               ><br />
-              <span> {{ item.next_coin || "0.0000" }} USDT</span>
+              <span v-if="item.coin != 'TT'">
+                {{ item.next_coin || "0.0000" }} USDT</span
+              >
             </div>
 
             <div class="choose-div percent-div">
@@ -86,7 +91,20 @@ export default {
       ],
       lp_timer: null,
       tt_timer: null,
+
+      tt_usdt_rate: 0,
+      tt_total: 0,
+      usdt_total: 0,
     };
+  },
+
+  computed: {
+    calc_total() {
+      this.usdt_total = this.usdt_total || 0;
+      this.tt_usdt_rate = this.tt_usdt_rate || 0;
+      this.tt_total = this.tt_total || 0;
+        return  this.tt_total * this.tt_usdt_rate + this.usdt_total * 1
+    },
   },
   methods: {
     init() {
@@ -111,15 +129,35 @@ export default {
           huiwanUsdtMdexAddr,
           function (res) {
             console.log("mdex 中配对合约拥有 huiwanToken 数量：" + res);
-            that.token_list[0].pre_coin = res / 1000000000000000000;
+            that.token_list[0].pre_coin = (res / 1000000000000000000).toFixed(
+              2
+            );
+            // 第一个池子的tt
+            that.tt_total += that.token_list[0].pre_coin * 1;
+            // 查询 mdex 中配对合约拥有 usdtToken 的数量
+            cfg.getBalanceFromUsdtTokenContract(
+              huiwanUsdtMdexAddr,
+              function (result) {
+                // console.log("mdex 中配对合约拥有 usdtToken 数量：" + res);
+                result = result * 1 > 0 ? result : 0;
+
+                that.token_list[0].next_coin = (
+                  result / 1000000000000000000
+                ).toFixed(2);
+                //第一个矿池的USDT
+                that.usdt_total = that.token_list[0].next_coin * 1;
+                console.log( that.usdt_total,' that.usdt_total that.usdt_total that.usdt_total')
+                // 汇率
+                if (that.token_list[0].pre_coin * 1 > 0) {
+                  that.tt_usdt_rate =
+                    that.token_list[0].next_coin / that.token_list[0].pre_coin;
+                } else {
+                  that.tt_usdt_rate = 0;
+                }
+              }
+            );
           }
         );
-        // 查询 mdex 中配对合约拥有 usdtToken 的数量
-        cfg.getBalanceFromUsdtTokenContract(huiwanUsdtMdexAddr, function (res) {
-          // console.log("mdex 中配对合约拥有 usdtToken 数量：" + res);
-          res = res * 1 > 0 ? res : 0;
-          that.token_list[0].next_coin = res / 1000000000000000000;
-        });
       });
     },
     choose_click(path) {
@@ -151,12 +189,10 @@ export default {
             ((that.token_list[1].day / total) * 360 * 100).toFixed(2) + "%";
         });
         // 查询 mdex 中配对合约拥有 huiwanToken 的数量
-        spg.getBalanceFromHuiwanTokenContract(
-          huiwanSinglePoolAddr,
-          function (res) {
-            that.token_list[1].pre_coin = res / 1000000000000000000;
-          }
-        );
+        spg.getTotalSupply(function (res) {
+          that.token_list[1].pre_coin = (res / 1000000000000000000).toFixed(2);
+          that.tt_total += that.token_list[1].pre_coin * 1;
+        });
         // 查询 mdex 中配对合约拥有 usdtToken 的数量
         spg.getBalanceFromUsdtTokenContract(
           huiwanSinglePoolAddr,
@@ -186,14 +222,12 @@ export default {
         that.token_list[0].mounth = (res / 1000000000000000000) * 30;
         // 拿到总收益
         cfg.getTotalSupply(function (result) {
-          console.log(result);
           let total = result / 1000000000000000000;
           that.token_list[0].apy =
             ((that.token_list[0].day / total) * 360 * 100).toFixed(2) + "%";
         });
       });
       spg.getInitreward(function (res) {
-        console.log("当前奖励数量：" + res);
         that.token_list[1].day = res / 1000000000000000000;
         that.token_list[1].mounth = (res / 1000000000000000000) * 30;
       });
@@ -215,7 +249,7 @@ export default {
       this.calc_lp_rate_year();
       this.lp_timer = setTimeout(() => {
         this.calc_lp_rate_year_fn();
-      }, 2000);
+      }, 5000);
     },
   },
   created() {
@@ -225,13 +259,13 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-      this.calc_lp_rate_year_fn();
+        this.calc_lp_rate_year_fn();
       }, 3000);
     });
   },
   // before
-  beforerouteleave(){
-     this.lp_timer && clearTimeout(this.lp_timer);
+  beforerouteleave() {
+    this.lp_timer && clearTimeout(this.lp_timer);
     this.tt_timer && clearTimeout(this.tt_timer);
   },
   beforeDestroy() {

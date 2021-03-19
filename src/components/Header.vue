@@ -3,7 +3,7 @@
     <div class="header">
       <img src="@assets/image/logo.png" alt="" class="header-logo" />
       <ul class="list-ul">
-        <li class="btn-li list-li">{{ $t("header.nav04") }}</li>
+        <!-- <li class="btn-li list-li">{{ $t("header.nav04") }}</li> -->
         <li class="btn-li list-li">{{ account }}</li>
         <li class="btn-li list-li" @click="show_mune">
           {{ $t("header.nav05") }}
