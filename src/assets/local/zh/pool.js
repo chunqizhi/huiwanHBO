@@ -5,7 +5,7 @@ export default  {
     text03:'每天',
     text04:'每月',
     text05:'选择',
-    text06:'交易对数量:',
+    text06:'抵押数量:',
 
     text07:'您的余额',
     text08:'获取所有Token',

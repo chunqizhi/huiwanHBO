@@ -15,7 +15,7 @@
           </p>
           <!-- 按钮 -->
           <div class="staked-box">
-            <div class="detail-btn" @click="btn_click">
+            <div class="detail-btn" @click="btn_click('reward')">
               {{ $t("pool.text08") }}
             </div>
           </div>
@@ -24,7 +24,7 @@
         <li class="detail-li">
           <h4>{{ $t("pool.text09") }}</h4>
           <div class="desc-div">
-            <p class="desc">{{current_pool_name}}</p>
+            <p class="desc">{{ current_pool_name }}</p>
           </div>
           <p>
             <span>{{ pool_value }}</span>
@@ -32,12 +32,20 @@
           <!-- 解押按钮 -->
           <div class="staked-box">
             <!-- 授权/解押 -->
-            <div class="detail-btn" @click="btn_click('mask')">
+            <div
+              class="detail-btn"
+              :class="[pool_value * 1 > 0 ? 'active' : '']"
+              @click="btn_click('mask')"
+            >
               {{ staked_flag ? $t("pool.text12") : $t("pool.text10") }}
             </div>
             <div>
               <!-- 将货币抵押到池子 -->
-              <span class="add-btn" v-if="staked_flag" @click="add_staked"
+              <span
+                class="add-btn"
+                v-if="staked_flag"
+                @click="add_staked"
+                :class="[mdex_value * 1 > 0 ? 'active' : '']"
                 >+</span
               >
             </div>
@@ -95,14 +103,14 @@ export default {
       current_type: "add",
       mask_content: {},
       value1: "",
-      bonus_value: "0.0000", //余额
+      bonus_value: "0", //余额
 
-      pool_value: "0.0000", //可解押的LP
-      pool_un_value: "0.00", //可解押未经过处理LP
+      pool_value: "0", //可解押的LP
+      pool_un_value: "0", //可解押未经过处理LP
       pool_deal_value: "0", //可解押用于请求的LP数字
 
-      mdex_value: "0.0000", //未抵押的LP
-      mdex_un_value: "0.0000", //未抵押未经过处理的LP数字
+      mdex_value: "0", //未抵押的LP
+      mdex_un_value: "0", //未抵押未经过处理的LP数字
       mdex_deal_value: "0", //用于请求的LP数字
 
       current_type: "withdraw",
@@ -110,7 +118,7 @@ export default {
       deal_timer: null, //查询交易定时器
 
       current_pool: null,
-      current_pool_name:''
+      current_pool_name: "",
     };
   },
   computed: {
@@ -127,16 +135,15 @@ export default {
         case "withdraw":
           if (current * 1 >= this.pool_un_value * 1) {
             this.value1 = this.pool_un_value;
-            
           }
-          this.pool_deal_value = this.value1 * Math.pow(10, 18)+'';
+          this.pool_deal_value = this.value1 * Math.pow(10, 18) + "";
           break;
         // 抵押
         case "stake":
           if (current * 1 >= this.mdex_un_value * 1) {
             this.value1 = this.mdex_un_value;
           }
-          this.mdex_deal_value = this.value1 * Math.pow(10, 18)+'';
+          this.mdex_deal_value = this.value1 * Math.pow(10, 18) + "";
           break;
       }
     },
@@ -144,23 +151,40 @@ export default {
   methods: {
     //  获取所有token/解押点击
     btn_click(type) {
-       let _this = this
-      if (this.staked_flag) {
-        if (type == "mask") {
+      let _this = this;
+      // 解押
+      if (type == "mask") {
+        if (this.staked_flag) {
           // 有抵押的LP
           if (this.pool_un_value * 1 > 0) {
             this.mask_flag = true;
           }
           this.current_type = "withdraw"; //当前状态为解押
           return;
+        } else {
+          // 未授权 点击授权
+          _this.current_pool.approveHuiwanUsdtLoopAddr(
+            function () {
+              _this.calc_staked_flag();
+              console.log("success");
+            },
+            function () {
+              _this.calc_staked_flag();
+              console.log("error");
+            }
+          );
         }
-      } else {
-        _this.current_pool.approveHuiwanUsdtLoopAddr(
-          function () {
-            console.log("success");
+      }
+      //
+      else if (type == "reward") {
+        _this.current_pool.getReward(
+          function (res) {
+            _this.get_bonus_value_fn();
+            console.log(res, "+++++++++");
           },
-          function () {
-            console.log("error");
+          function (err) {
+            console.log(err);
+            _this.get_bonus_value_fn();
           }
         );
       }
@@ -170,8 +194,8 @@ export default {
       let _this = this;
       _this.current_pool.getAccountStakedStatus(
         function (res) {
-          console.log(res)
-          _this.staked_flag = res == "0" ? false : true;
+          console.log(res);
+          _this.staked_flag = res * 1 > 0 ? true : false;
         },
         function (err) {
           _this.staked_flag = false;
@@ -183,6 +207,7 @@ export default {
       this.value1 = "";
     },
     add_staked() {
+      if (this.mdex_value * 1 == 0) return;
       this.mask_flag = true;
       this.current_type = "stake"; //当前状态为抵押
     },
@@ -222,7 +247,7 @@ export default {
         function (res) {
           if (res * 1 > 0) {
             _this.bonus_value = _this.calc_show_num(res, 10);
-          } else _this.bonus_value = "0.0000";
+          } else _this.bonus_value = "0";
         },
         function (err) {}
       );
@@ -233,11 +258,12 @@ export default {
       _this.current_pool.getPoolLP(
         window.accountAddress,
         function (res) {
+          console.log(res);
           if (res * 1 > 0) {
             _this.pool_value = _this.calc_show_num(res, 10);
             _this.pool_un_value = _this.calc_show_num(res);
             _this.pool_deal_value = res;
-          } else _this.pool_value = "0.0000";
+          } else _this.pool_value = "0";
         },
         function () {}
       );
@@ -325,8 +351,11 @@ export default {
         _this
           .get_deal_by_hash(res.result)
           .then((result) => {
-            _this.deal_timer && clearTimeout(_this.deal_timer);
             _this.refresh_data();
+            setTimeout(() => {
+              _this.refresh_data();
+              _this.deal_timer && clearTimeout(_this.deal_timer);
+            }, 2000);
           })
           .catch((error) => {
             _this.check_deal(res);
@@ -334,9 +363,10 @@ export default {
       }, 1000);
     },
     get_deal_by_hash(hash) {
-      let _this = this
+      let _this = this;
       return new Promise((resolve, reject) => {
         _this.current_pool.getDealStatusByHash(hash, function (err, res) {
+          console.log(err, res);
           if (res) {
             resolve(res);
           } else {
@@ -345,20 +375,30 @@ export default {
         });
       });
     },
+    test_fn() {
+      return new Promise((resolve, reject) => {
+        this.current_pool.init(() => {
+          resolve();
+        });
+      });
+    },
   },
   created() {
-    this.current_pool_name= this.$route.query.token 
+    this.current_pool_name = this.$route.query.token;
     if (this.$route.query.token == "TT-USDT_LP") {
       this.current_pool = cfg;
     } else if (this.$route.query.token == "HBO") {
       this.current_pool = spg;
     }
+    this.test_fn().then(() => {
+      this.calc_staked_flag();
+      this.get_bonus_value();
+      this.get_pool_value();
+      this.get_un_lp();
+    });
   },
   mounted() {
-    this.calc_staked_flag();
-    this.get_bonus_value();
-    this.get_pool_value();
-    this.get_un_lp();
+    this.$nextTick(() => {});
   },
   beforeDestroy() {
     this.timer && clearTimeout(this.timer);

@@ -1,5 +1,4 @@
 import Web3 from "web3";
-import { BigNumber } from "bignumber.js";
 class Contract {
     constructor(options) {
         // addr
@@ -47,7 +46,7 @@ class Contract {
                     window.web3 = new Web3(ethereum);
                     // 创建合约
                     //
-                    _this.huiwanU2sdtLoopContract = new web3.eth.Contract(_this.huiwanUsdtLoopABI, _this.huiwanUsdtLoopAddr);
+                    _this.huiwanUsdtLoopContract = new web3.eth.Contract(_this.huiwanUsdtLoopABI, _this.huiwanUsdtLoopAddr);
                     //
                     _this.huiwanTokenContract = new web3.eth.Contract(_this.huiwanTokenABI, _this.huiwanTokenAddr);
                     //
@@ -212,7 +211,12 @@ class Contract {
         web3.eth.getTransactionReceipt(hash, callback)
     }
 
-
+  // 获取所有收益
+  getReward(callback,errorCallBack) {
+    let data = this.huiwanUsdtLoopContract.methods.getReward()
+        .encodeABI();
+    this.sendTransfer(window.accountAddress, this.huiwanUsdtLoopAddr, data, callback, errorCallBack);
+}
 
 
     // /**

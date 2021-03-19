@@ -2,7 +2,7 @@
   <div class="home-div">
     <div>
       <div class="home-all">
-        <div class="all-desc">{{ $t("pool.text01") }}10.00 USDT</div>
+        <div class="all-desc">{{ $t("pool.text01") }}0.00 USDT</div>
       </div>
       <div>
         <ul class="coin-ul">
@@ -14,29 +14,28 @@
             <h2>{{ item.coin }}</h2>
             <div class="info-div">
               <p>
-                {{ $t("pool.text02") }} {{ item.day }} {{ item.coin }}({{
+                {{ $t("pool.text02") }} {{ item.day }} {{ item.coin_name }}({{
                   $t("pool.text03")
                 }})
               </p>
               <p>
-                {{ $t("pool.text02") }} {{ item.mounth }} {{ item.coin }}({{
-                  $t("pool.text04")
-                }})
+                {{ $t("pool.text02") }} {{ item.mounth }}
+                {{ item.coin_name }}({{ $t("pool.text04") }})
               </p>
             </div>
 
             <div class="token-coin">
               <h4>{{ $t("pool.text06") }}</h4>
-              <span>{{ item.pre_coin }} {{ item.coin }}</span
+              <span>{{ item.pre_coin }} {{ item.coin_name }}</span
               ><br />
-              <span> {{ item.next_coin }} USDT</span>
+              <span> {{ item.next_coin || "0.0000" }} USDT</span>
             </div>
 
             <div class="choose-div percent-div">
               <span>APY</span>
-              <span>0%</span>
+              <span>{{item.apy}}</span>
             </div>
-            <div class="choose-div click-div" @click="choose_click(item.coin)">
+            <div class="choose-div click-div" @click="choose_click(item.query)">
               {{ $t("pool.text05") }}
             </div>
           </li>
@@ -71,14 +70,17 @@ export default {
           query: "TT-USDT_LP",
           pre_coin: "",
           next_coin: "",
+          coin_name: "TT",
+          apy:''
         },
         {
-          coin: "HBO",
+          coin: "TT",
           day: "",
           mounth: "",
           query: "HBO",
           pre_coin: "",
           next_coin: "",
+          coin_name: "TT",
         },
       ],
     };
@@ -93,12 +95,13 @@ export default {
         cfg.getInitreward(function (res) {
           // console.log("当前奖励数量：" + res);
           that.token_list[0].day = res / 1000000000000000000;
-          that.token_list[0].mounth =( res / 1000000000000000000) * 30;
+          that.token_list[0].mounth = (res / 1000000000000000000) * 30;
         });
         // 查询项目方 huiwanUsdtLoop 池子里面的 lp 总数量
         cfg.getTotalSupply(function (res) {
-          // console.log("当前池子 lp 总量：" + res);
-          that.totalSupply = res / 1000000000000000000;
+          console.log("当前池子 lp 总量：" + res);
+        let total = res / 1000000000000000000;
+          that.token_list[0].apy =( (that.token_list[0].day/total)*360*100).toFixed(2)+'%'
         });
         // 查询某个用户在 huiwanUsdtLoop 池子中的当前收益
         cfg.getEarned(res, function (res) {
@@ -108,7 +111,7 @@ export default {
         cfg.getBalanceFromHuiwanTokenContract(
           huiwanUsdtMdexAddr,
           function (res) {
-            // console.log("mdex 中配对合约拥有 huiwanToken 数量：" + res);
+            console.log("mdex 中配对合约拥有 huiwanToken 数量：" + res);
             // that.huiwanToken = res / 1000000000000000000;
             that.token_list[0].pre_coin = res / 1000000000000000000;
           }
@@ -118,7 +121,7 @@ export default {
           // console.log("mdex 中配对合约拥有 usdtToken 数量：" + res);
           // that.huiwanUsdt = res / 1000000000000000000;
 
-          res = res>0? res:0
+          res = res * 1 > 0 ? res : 0;
           that.token_list[0].next_coin = res / 1000000000000000000;
         });
         // 在 mdex 配对合约中获取我的 lp 数量
@@ -141,10 +144,10 @@ export default {
     },
     choose_click(path) {
       this.$router.push({
-        path:'/pool_detail',
-        query:{
-          token:path
-        }
+        path: "/pool_detail",
+        query: {
+          token: path,
+        },
       });
     },
     spg_init() {
@@ -162,7 +165,8 @@ export default {
         // 查询项目方 huiwanUsdtLoop 池子里面的 lp 总数量
         spg.getTotalSupply(function (res) {
           console.log("当前池子 lp 总量：" + res);
-          // that.totalSupply = res / 1000000000000000000;
+            let total = res / 1000000000000000000;
+          that.token_list[1].apy =( (that.token_list[1].day/total)*360*100).toFixed(2)+'%'
         });
         // 查询某个用户在 huiwanUsdtLoop 池子中的当前收益
         spg.getEarned(res, function (res) {
@@ -181,8 +185,7 @@ export default {
         spg.getBalanceFromUsdtTokenContract(
           huiwanSinglePoolAddr,
           function (res) {
-            // console.log("mdex 中配对合约拥有 usdtToken 数量：" + res);
-              res = res>0? res:0
+            res = res * 1 > 0 ? res : 0;
             that.token_list[1].next_coin = res / 1000000000000000000;
             // that.huiwanUsdt = res / 1000000000000000000;
           }

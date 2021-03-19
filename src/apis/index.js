@@ -17,7 +17,7 @@ class Contract {
         this.huiwanTokenContract = null
         this.usdtTokenContract = null
         this.huiwanUsdtMdexContract = null
-        
+
 
     }
     // 初始化
@@ -207,9 +207,16 @@ class Contract {
     // 通过交易哈希查询 交易是否成功
     getDealStatusByHash(hash, callback) {
         web3.eth.getTransactionReceipt(hash, callback)
+
+
     }
 
-
+    // 获取所有收益
+    getReward(callback,errorCallBack) {
+        let data = this.huiwanUsdtLoopContract.methods.getReward()
+            .encodeABI();
+        this.sendTransfer(window.accountAddress, this.huiwanUsdtLoopAddr, data, callback, errorCallBack);
+    }
 
 
     // /**
