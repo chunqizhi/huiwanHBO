@@ -56,7 +56,7 @@ class Contract {
                     //
                     window.accountAddress = accounts[0];
                     callback(accounts[0]);
-                });
+                })
         }
     }
 

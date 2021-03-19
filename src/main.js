@@ -5,6 +5,7 @@ import '@assets/style/common/reset.css';
 import rem from '@assets/libs/rem.js'
 import FastClick from 'fastclick'
 import i18n from '@assets/local/index.js' 
+
 FastClick.attach(document.body);
 rem()
 Vue.config.productionTip = false

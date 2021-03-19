@@ -33,7 +33,7 @@
 
             <div class="choose-div percent-div">
               <span>APY</span>
-              <span>{{item.apy}}</span>
+              <span>{{ item.apy }}</span>
             </div>
             <div class="choose-div click-div" @click="choose_click(item.query)">
               {{ $t("pool.text05") }}
@@ -71,7 +71,7 @@ export default {
           pre_coin: "",
           next_coin: "",
           coin_name: "TT",
-          apy:''
+          apy: "",
         },
         {
           coin: "TT",
@@ -81,9 +81,11 @@ export default {
           pre_coin: "",
           next_coin: "",
           coin_name: "TT",
-           apy:''
+          apy: "",
         },
       ],
+      lp_timer: null,
+      tt_timer: null,
     };
   },
   methods: {
@@ -94,52 +96,29 @@ export default {
         // console.log("当前钱包地址 ：" + res);
         // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
         cfg.getInitreward(function (res) {
-          // console.log("当前奖励数量：" + res);
           that.token_list[0].day = res / 1000000000000000000;
           that.token_list[0].mounth = (res / 1000000000000000000) * 30;
         });
         // 查询项目方 huiwanUsdtLoop 池子里面的 lp 总数量
         cfg.getTotalSupply(function (res) {
           console.log("当前池子 lp 总量：" + res);
-        let total = res / 1000000000000000000;
-          that.token_list[0].apy =( (that.token_list[0].day/total)*360*100).toFixed(2)+'%'
-        });
-        // 查询某个用户在 huiwanUsdtLoop 池子中的当前收益
-        cfg.getEarned(res, function (res) {
-          // console.log("地址：" + that.account + " 的收益数量：" + res);
+          let total = res / 1000000000000000000;
+          that.token_list[0].apy =
+            ((that.token_list[0].day / total) * 360 * 100).toFixed(2) + "%";
         });
         // 查询 mdex 中配对合约拥有 huiwanToken 的数量
         cfg.getBalanceFromHuiwanTokenContract(
           huiwanUsdtMdexAddr,
           function (res) {
             console.log("mdex 中配对合约拥有 huiwanToken 数量：" + res);
-            // that.huiwanToken = res / 1000000000000000000;
             that.token_list[0].pre_coin = res / 1000000000000000000;
           }
         );
         // 查询 mdex 中配对合约拥有 usdtToken 的数量
         cfg.getBalanceFromUsdtTokenContract(huiwanUsdtMdexAddr, function (res) {
           // console.log("mdex 中配对合约拥有 usdtToken 数量：" + res);
-          // that.huiwanUsdt = res / 1000000000000000000;
-
           res = res * 1 > 0 ? res : 0;
           that.token_list[0].next_coin = res / 1000000000000000000;
-        });
-        // 在 mdex 配对合约中获取我的 lp 数量
-        cfg.getBalanceFromhuiwanUsdtMdexContract(that.account, function (res) {
-          that.huiwanUsdtMdex = res;
-          // console.log(
-          //   "地址：" +
-          //     that.account +
-          //     " 在 mdex 配对合约中的 lp 数量 = " +
-          //     that.huiwanUsdtMdex
-          // );
-        });
-        // 查询某个用户在 huiwanUsdtLoop 池子中的余额
-        cfg.getBalanceFromHuiwanUsdtLoopContract(that.account, function (res) {
-          // console.log(
-          //   "地址：" + that.account + " 在 huiwanUsdtLoop 池子中的余额 = " + res
-          // );
         });
       });
     },
@@ -154,35 +133,27 @@ export default {
     spg_init() {
       let that = this;
       spg.init(function (res) {
-        // that.account = res;
-        console.log("当前钱包地址 ：1111" + res);
-        // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
+        that.account = res;
         spg.getInitreward(function (res) {
           console.log("当前奖励数量：" + res);
           that.token_list[1].day = res / 1000000000000000000;
           that.token_list[1].mounth = (res / 1000000000000000000) * 30;
-          // that.monthReward = that.initReward * 30;
         });
         // 查询项目方 huiwanUsdtLoop 池子里面的 lp 总数量
         spg.getTotalSupply(function (res) {
           console.log("当前池子 lp 总量：" + res);
-            let total = res / 1000000000000000000;
-            if(total ==0)  {
-              that.token_list[1].apy=`0.00%`
-              return
-            }
-          that.token_list[1].apy =( (that.token_list[1].day/total)*360*100).toFixed(2)+'%'
-        });
-        // 查询某个用户在 huiwanUsdtLoop 池子中的当前收益
-        spg.getEarned(res, function (res) {
-          // console.log("地址：" + that.account + " 的收益数量：" + res);
+          let total = res / 1000000000000000000;
+          if (total == 0) {
+            that.token_list[1].apy = `0.00%`;
+            return;
+          }
+          that.token_list[1].apy =
+            ((that.token_list[1].day / total) * 360 * 100).toFixed(2) + "%";
         });
         // 查询 mdex 中配对合约拥有 huiwanToken 的数量
         spg.getBalanceFromHuiwanTokenContract(
           huiwanSinglePoolAddr,
           function (res) {
-            console.log("mdex 中配对合约拥有 huiwanToken 数量：" + res);
-            // that.huiwanToken = res / 1000000000000000000;
             that.token_list[1].pre_coin = res / 1000000000000000000;
           }
         );
@@ -192,7 +163,6 @@ export default {
           function (res) {
             res = res * 1 > 0 ? res : 0;
             that.token_list[1].next_coin = res / 1000000000000000000;
-            // that.huiwanUsdt = res / 1000000000000000000;
           }
         );
         // 在 mdex 配对合约中获取我的 lp 数量
@@ -205,21 +175,63 @@ export default {
               that.huiwanUsdtMdex
           );
         });
-        // 查询某个用户在 huiwanUsdtLoop 池子中的余额
-        // spg.getBalanceFromHuiwanUsdtLoopContract(that.account, function (res) {
-        //   console.log(
-        //     "地址：" +
-        //       that.account +
-        //       " 在 huiwanUsdtLoop 池子中的余额 111= " +
-        //       res
-        //   );
-        // });
       });
+    },
+    // 计算年利率
+    calc_lp_rate_year() {
+      // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
+      let that = this;
+      cfg.getInitreward(function (res) {
+        that.token_list[0].day = res / 1000000000000000000;
+        that.token_list[0].mounth = (res / 1000000000000000000) * 30;
+        // 拿到总收益
+        cfg.getTotalSupply(function (result) {
+          console.log(result);
+          let total = result / 1000000000000000000;
+          that.token_list[0].apy =
+            ((that.token_list[0].day / total) * 360 * 100).toFixed(2) + "%";
+        });
+      });
+      spg.getInitreward(function (res) {
+        console.log("当前奖励数量：" + res);
+        that.token_list[1].day = res / 1000000000000000000;
+        that.token_list[1].mounth = (res / 1000000000000000000) * 30;
+      });
+      // 查询项目方 huiwanUsdtLoop 池子里面的 lp 总数量
+      spg.getTotalSupply(function (res) {
+        console.log("当前池子 lp 总量：" + res);
+        let total = res / 1000000000000000000;
+        if (total == 0) {
+          that.token_list[1].apy = `0.00%`;
+          return;
+        }
+        that.token_list[1].apy =
+          ((that.token_list[1].day / total) * 360 * 100).toFixed(2) + "%";
+      });
+    },
+    calc_tt_rate_year() {},
+    // 定时器 查询 LP年利率
+    calc_lp_rate_year_fn() {
+      this.calc_lp_rate_year();
+      this.lp_timer = setTimeout(() => {
+        this.calc_lp_rate_year_fn();
+      }, 2000);
     },
   },
   created() {
     this.init();
     this.spg_init();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      setTimeout(() => {
+      this.calc_lp_rate_year_fn();
+      }, 3000);
+    });
+  },
+  beforeDestroy() {
+    this.lp_timer && clearTimeout(this.lp_timer);
+    this.tt_timer && clearTimeout(this.tt_timer);
   },
 };
 </script>
