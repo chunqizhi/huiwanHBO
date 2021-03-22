@@ -138,11 +138,11 @@ export default {
             cfg.getBalanceFromUsdtTokenContract(
               huiwanUsdtMdexAddr,
               function (result) {
-                // console.log("mdex 中配对合约拥有 usdtToken 数量：" + res);
+                console.log("mdex 中配对合约拥有 usdtToken 数量：" + result);
                 result = result * 1 > 0 ? result : 0;
 
                 that.token_list[0].next_coin = (
-                  result / 1000000000000000000
+                  result / 1000000
                 ).toFixed(2);
                 //第一个矿池的USDT
                 that.usdt_total = that.token_list[0].next_coin * 1;
