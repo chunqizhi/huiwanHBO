@@ -142,7 +142,7 @@ export default {
                 result = result * 1 > 0 ? result : 0;
 
                 that.token_list[0].next_coin = (
-                  result / 1000000
+                  result / 1000000000000000000
                 ).toFixed(2);
                 //第一个矿池的USDT
                 that.usdt_total = that.token_list[0].next_coin * 1;
