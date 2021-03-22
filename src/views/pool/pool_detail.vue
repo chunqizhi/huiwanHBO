@@ -171,14 +171,22 @@ export default {
         } else {
           // 未授权 点击授权
           _this.current_pool.approveHuiwanUsdtLoopAddr(
-            function () {
-              _this.calc_staked_flag();
-              console.log("success");
-            },
-            function () {
-              _this.calc_staked_flag();
-              console.log("error");
-            }
+              function (res) {
+                if (res) {
+                  _this.check_deal(res);
+                }
+              },
+              function (err) {
+                _this.refresh_data();
+              }
+            // function () {
+            //   _this.calc_staked_flag();
+            //   console.log("success");
+            // },
+            // function () {
+            //   _this.calc_staked_flag();
+            //   console.log("error");
+            // }
           );
         }
       }
@@ -347,6 +355,7 @@ export default {
     },
     // 重新获取数据
     refresh_data(res) {
+      this.calc_staked_flag();
       this.get_pool_value();
       this.get_un_lp();
       this.mask_flag = false;
