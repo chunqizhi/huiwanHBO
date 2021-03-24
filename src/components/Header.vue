@@ -1,7 +1,8 @@
 <template>
   <div class="header-box">
     <div class="header">
-      <img src="@assets/image/logo.png" alt="" class="header-logo" />
+      <img src="@assets/image/icon.png" alt="" class="header-logo" />
+      <span class="header-title">Search Artifacts</span>
       <ul class="list-ul">
         <!-- <li class="btn-li list-li">{{ $t("header.nav04") }}</li> -->
         <li class="btn-li list-li">{{ account }}</li>

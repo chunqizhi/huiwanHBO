@@ -9,7 +9,7 @@
             <p class="desc"></p>
           </div>
           <p>
-            <img src="@assets/image/coin.png" alt="" />
+            <img src="@assets/image/icon.png" alt="" />
             <!-- 余额 -->
             <span>{{ bonus_value }}</span>
           </p>
@@ -57,14 +57,11 @@
         </li>
       </ul>
       <!-- 获取&解押 -->
-      <div 
-       class="all-btn"
-        @click="all_btn_click"
-        >{{ $t("pool.text11") }}</div>
+      <div class="all-btn" @click="all_btn_click">{{ $t("pool.text11") }}</div>
     </div>
 
-    <div class="mask"  v-if="mask_flag" @click.stop="close_mask"></div>
-
+    <div class="mask" v-if="mask_flag" @click.stop="close_mask"></div>
+    <!--  -->
     <van-dialog
       show-cancel-button
       v-model="mask_flag"
@@ -143,14 +140,15 @@ export default {
           if (current * 1 >= this.pool_un_value * 1) {
             this.value1 = this.pool_un_value;
           }
-          this.pool_deal_value = this.value1 * Math.pow(10, 18) + "";
+          this.pool_deal_value = this.$toWei(this.value1);
           break;
         // 抵押
         case "stake":
           if (current * 1 >= this.mdex_un_value * 1) {
             this.value1 = this.mdex_un_value;
           }
-          this.mdex_deal_value = this.value1 * Math.pow(10, 18) + "";
+          // value1
+          this.mdex_deal_value = this.$toWei(this.value1);
           break;
       }
     },
@@ -171,14 +169,14 @@ export default {
         } else {
           // 未授权 点击授权
           _this.current_pool.approveHuiwanUsdtLoopAddr(
-              function (res) {
-                if (res) {
-                  _this.check_deal(res);
-                }
-              },
-              function (err) {
-                _this.refresh_data();
+            function (res) {
+              if (res) {
+                _this.check_deal(res);
               }
+            },
+            function (err) {
+              _this.refresh_data();
+            }
             // function () {
             //   _this.calc_staked_flag();
             //   console.log("success");
@@ -245,14 +243,11 @@ export default {
     // 获取盈利余额
     get_bonus_value() {
       let _this = this;
+      _this.timer && clearTimeout(_this.timer);
       _this.get_bonus_value_fn();
       _this.timer = setTimeout(() => {
-        _this.get_bonus_value_fn();
-        if (_this.timer) {
-          clearTimeout(_this.timer);
-        }
         _this.get_bonus_value();
-      }, 3000);
+      }, 2000);
     },
     // 查询盈利余额
     get_bonus_value_fn() {
@@ -260,8 +255,9 @@ export default {
       _this.current_pool.getEarned(
         window.accountAddress,
         function (res) {
+          console.log(res);
           if (res * 1 > 0) {
-            _this.bonus_value = _this.calc_show_num(res, 10);
+            _this.bonus_value = (_this.$wei(res) * 1).toFixed(4);
           } else _this.bonus_value = "0.0000";
         },
         function (err) {}
@@ -275,8 +271,8 @@ export default {
         function (res) {
           console.log(res);
           if (res * 1 > 0) {
-            _this.pool_value = _this.calc_show_num(res, 10);
-            _this.pool_un_value = _this.calc_show_num(res);
+            _this.pool_value = _this.$wei(res);
+            _this.pool_un_value = _this.$wei(res);
             _this.pool_deal_value = res;
           } else _this.pool_value = "0.0000";
         },
@@ -346,8 +342,8 @@ export default {
       _this.current_pool.getBalanceFromhuiwanUsdtMdexContract(
         window.accountAddress,
         function (res) {
-          _this.mdex_value = _this.calc_show_num(res, 10);
-          _this.mdex_un_value = _this.calc_show_num(res);
+          _this.mdex_value = _this.$wei(res);
+          _this.mdex_un_value = _this.$wei(res);
           _this.mdex_deal_value = res;
         },
         function () {}
@@ -412,7 +408,7 @@ export default {
     },
     // 获取收益 抵押 解押
     refresh_page_fn() {
-      this.get_bonus_value_fn();
+      this.get_bonus_value();
       this.get_pool_value();
       this.get_un_lp();
     },

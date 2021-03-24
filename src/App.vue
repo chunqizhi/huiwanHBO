@@ -14,3 +14,9 @@ export default {
   },
 };
 </script>
+<style >
+
+#app{
+  padding-bottom: .2rem;
+}
+</style>
