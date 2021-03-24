@@ -17,6 +17,7 @@ input
 {
     outline: 0;
     outline: none;
+    border: none;
 }
 .ellipsis
 {

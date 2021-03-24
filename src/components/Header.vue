@@ -4,7 +4,7 @@
       <img src="@assets/image/icon.png" alt="" class="header-logo" />
       <span class="header-title">Search Artifacts</span>
       <ul class="list-ul">
-        <!-- <li class="btn-li list-li">{{ $t("header.nav04") }}</li> -->
+        <li class="btn-li list-li">{{ $t("header.nav04") }}</li>
         <li class="btn-li list-li">{{ account }}</li>
         <li class="btn-li list-li" @click="show_mune">
           {{ $t("header.nav05") }}
@@ -50,10 +50,10 @@ export default {
           path: "/pool_index",
           desc: "header.desc01",
         },
-        // {
-        //   text: "header.nav03",
-        //   path: "/info",
-        // },
+        {
+          text: "header.nav03",
+          path: "/info",
+        },
       ],
       current_router: "",
       mune_flag: false,
