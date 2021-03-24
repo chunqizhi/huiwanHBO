@@ -16,17 +16,11 @@ Vue.prototype.$toWei = utils.towei_fn
 
 import './apis/index'
 import {
-  Icon,
-  Popover,
   Toast,
-  Loading,
-  Dialog 
+  Dialog,
 } from "vant";
 
-Vue.use(Icon);
-Vue.use(Popover);
 Vue.use(Toast);
-Vue.use(Loading);
 Vue.use(Dialog )
 new Vue({
   router,

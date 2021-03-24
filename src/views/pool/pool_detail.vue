@@ -78,7 +78,7 @@
           }}
         </h4>
         <p class="span-text">
-          <span class="span-coin">{{current_pool_name}}</span>
+          <span class="span-coin">{{ current_pool_name }}</span>
           <span class="span-balance">{{
             current_type == "withdraw" ? pool_value : mdex_value
           }}</span>
@@ -144,11 +144,12 @@ export default {
           break;
         // 抵押
         case "stake":
-          if (current * 1 >= this.mdex_un_value * 1) {
-            this.value1 = this.mdex_un_value;
-          }
+          // if (current * 1 >= this.mdex_un_value * 1) {
+          //   this.value1 = this.mdex_un_value;
+          // }
           // value1
-          this.mdex_deal_value = this.$toWei(this.value1);
+          // this.mdex_deal_value = this.$toWei(this.value1);
+          this.mdex_deal_value = this.value1;
           break;
       }
     },
@@ -224,22 +225,6 @@ export default {
       this.mask_flag = true;
       this.current_type = "stake"; //当前状态为抵押
     },
-    calc_show_num(res, len) {
-      let result = "";
-      if (res.length <= 18) {
-        res = this.format_zero(res * 1, 19);
-      }
-      let length = res.length;
-      let pre = res.substring(0, res.length - 18);
-      let next = res.substring(length - 18).substring(0, len);
-      result = `${pre}.${next}`;
-
-      return result;
-    },
-    format_zero(num, len) {
-      if (String(num).length > len) return num;
-      return (Array(len).join(0) + num).slice(-len);
-    },
     // 获取盈利余额
     get_bonus_value() {
       let _this = this;
@@ -309,6 +294,11 @@ export default {
     // 确认解押
     withdraw_fn() {
       let _this = this;
+      if (isNaN(_this.pool_deal_value)) {
+        _this.$toast(_this.$t("tips.tips01"));
+        _this.value1 = 0;
+        return;
+      }
       _this.current_pool.withdrawFromHuiwanUsdtLoopContract(
         _this.pool_deal_value,
         function (res) {
@@ -324,6 +314,11 @@ export default {
     // 确认抵押
     stake_fn() {
       let _this = this;
+      if (isNaN(_this.mdex_deal_value)) {
+        _this.$toast(_this.$t("tips.tips01"));
+        _this.value1 = 0;
+        return;
+      }
       _this.current_pool.stakingToHuiwanUsdtLoopContract(
         _this.mdex_deal_value,
         function (res) {
@@ -425,9 +420,7 @@ export default {
       this.refresh_page_fn();
     });
   },
-  mounted() {
-    this.$nextTick(() => {});
-  },
+  mounted() {},
   beforeDestroy() {
     this.timer && clearTimeout(this.timer);
     this.deal_timer && clearTimeout(this.deal_timer);

@@ -17,12 +17,9 @@
             </div>
 
             <div class="token-coin">
-              <h4>{{ $t("pool.text06") }}</h4>
+              <h4>{{ $t("pool.text17") }}</h4>
               <span>{{ token_list.pre_coin }} {{ token_list.coin_name }}</span
               ><br />
-              <span v-if="token_list.coin != 'TT'">
-                {{ token_list.next_coin || "0.0000" }} USDT</span
-              >
             </div>
 
             <div class="choose-div percent-div">

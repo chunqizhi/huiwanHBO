@@ -15,5 +15,6 @@ export default {
     text13: 'Staked',
     text14:'All',
     text15:'Confirm',
-    text16:'Cancel'
+    text16:'Cancel',
+    text17:'Token Amount'
 }

@@ -16,6 +16,8 @@ export default  {
     text13:'抵押',
     text14:'全部',
     text15:'确定',
-    text16:'取消'
+    text16:'取消',
+
+    text17:'Token 数量'
 
 }
