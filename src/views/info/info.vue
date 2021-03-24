@@ -18,4 +18,7 @@ h2 {
   position: relative;
   padding: 0.18rem 0;
 }
+img{  
+  width: 100%;
+}
 </style>

@@ -73,6 +73,7 @@ export default {
         },
       });
     },
+    // 初始化
     spg_init_fn() {
       return new Promise((resolve, reject) => {
         spg.init((res) => {
