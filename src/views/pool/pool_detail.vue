@@ -78,7 +78,7 @@
           }}
         </h4>
         <p class="span-text">
-          <span class="span-coin">TT-USDT-LP</span>
+          <span class="span-coin">{{current_pool_name}}</span>
           <span class="span-balance">{{
             current_type == "withdraw" ? pool_value : mdex_value
           }}</span>
