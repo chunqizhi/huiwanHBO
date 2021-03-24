@@ -1,7 +1,9 @@
 <template>
   <div class="info-div">
     <h2>{{ $t("info.title") }}</h2>
-    <img src="@assets/image/apply.png" alt="" class="header-logo" />
+   <div class="img-box">
+      <img src="@assets/image/apply.png" alt="" class="header-logo" />
+   </div>
   </div>
 </template>
 
@@ -17,6 +19,10 @@ h2 {
   font-size: 0.18rem;
   position: relative;
   padding: 0.18rem 0;
+}
+.img-box{
+  width: 92%;
+  margin: 0 auto ;
 }
 img{  
   width: 100%;
