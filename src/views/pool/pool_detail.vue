@@ -144,12 +144,12 @@ export default {
           break;
         // 抵押
         case "stake":
-          // if (current * 1 >= this.mdex_un_value * 1) {
-          //   this.value1 = this.mdex_un_value;
-          // }
+          if (current * 1 >= this.mdex_un_value * 1) {
+            this.value1 = this.mdex_un_value;
+          }
           // value1
-          // this.mdex_deal_value = this.$toWei(this.value1);
-          this.mdex_deal_value = this.value1;
+          this.mdex_deal_value = this.$toWei(this.value1);
+          // this.mdex_deal_value = this.value1;
           break;
       }
     },
@@ -299,6 +299,10 @@ export default {
         _this.value1 = 0;
         return;
       }
+      if (_this.pool_deal_value == 0) {
+        _this.$toast(_this.$t("tips.tips02"));
+        return;
+      }
       _this.current_pool.withdrawFromHuiwanUsdtLoopContract(
         _this.pool_deal_value,
         function (res) {
@@ -317,6 +321,10 @@ export default {
       if (isNaN(_this.mdex_deal_value)) {
         _this.$toast(_this.$t("tips.tips01"));
         _this.value1 = 0;
+        return;
+      }
+       if (_this.mdex_deal_value == 0) {
+        _this.$toast(_this.$t("tips.tips02"));
         return;
       }
       _this.current_pool.stakingToHuiwanUsdtLoopContract(
