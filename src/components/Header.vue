@@ -40,11 +40,11 @@ export default {
   data() {
     return {
       nav_list: [
-        // {
-        //   text: "header.nav01",
-        //   path: "/home",
-        //   desc: "",
-        // },
+        {
+          text: "header.nav01",
+          path: "/home",
+          desc: "",
+        },
         {
           text: "header.nav02",
           path: "/pool_index",
