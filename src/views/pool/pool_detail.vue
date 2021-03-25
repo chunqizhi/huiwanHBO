@@ -254,14 +254,16 @@ export default {
       _this.current_pool.getPoolLP(
         window.accountAddress,
         function (res) {
-          console.log(res);
+          console.log(res,'获取抵押的LP');
           if (res * 1 > 0) {
             _this.pool_value = _this.$wei(res);
             _this.pool_un_value = _this.$wei(res);
             _this.pool_deal_value = res;
           } else _this.pool_value = "0.0000";
         },
-        function () {}
+        function () {
+          _this.get_pool_value()
+        }
       );
     },
     // 全部抵押/解押
@@ -377,10 +379,6 @@ export default {
           .get_deal_by_hash(res.result)
           .then((result) => {
             _this.refresh_data();
-            setTimeout(() => {
-              _this.refresh_data();
-              _this.deal_timer && clearTimeout(_this.deal_timer);
-            }, 2000);
           })
           .catch((error) => {
             _this.check_deal(res);
