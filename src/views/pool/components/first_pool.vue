@@ -147,7 +147,7 @@ export default {
       this.cfg_coin_fn();
       this.lp_coin_timer && clearTimeout(this.lp_coin_timer);
       this.lp_coin_timer = setTimeout(() => {
-        // this.cfg_coin_timer();
+        this.cfg_coin_timer();
       }, 2000);
     },
     choose_click(path) {
