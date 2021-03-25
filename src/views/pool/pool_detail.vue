@@ -304,7 +304,8 @@ export default {
         return;
       }
       if (_this.value1 * 1 > _this.pool_un_value * 1) {
-        _this.$toast(_this.$t("tips.tips01"));
+        _this.$toast(_this.$t("tips.tips03"));
+        _this.value1 = 0;
         return;
       }
       _this.current_pool.withdrawFromHuiwanUsdtLoopContract(
@@ -332,11 +333,12 @@ export default {
         return;
       }
       if (_this.value1 * 1 > _this.mdex_un_value * 1) {
-        _this.$toast(_this.$t("tips.tips01"));
+        _this.$toast(_this.$t("tips.tips03"));
+        _this.value1 = 0;
         return;
       }
       _this.current_pool.stakingToHuiwanUsdtLoopContract(
-       _this.$toWei(_this.value1),
+        _this.$toWei(_this.value1),
         function (res) {
           if (res) {
             _this.check_deal(res);
