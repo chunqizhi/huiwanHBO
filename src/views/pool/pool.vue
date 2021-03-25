@@ -1,9 +1,9 @@
 <template>
   <div class="home-div">
     <!-- TT-USDT_LP 矿池 -->
-    <FirstPool  :rate ='TT_USDT_Rate'/>
+    <FirstPool :rate="TT_USDT_Rate" />
     <!-- TT 矿池 -->
-    <SecondPool :rate ='TT_USDT_Rate'/>
+    <SecondPool :rate="TT_USDT_Rate" />
   </div>
 </template>
 
@@ -31,8 +31,7 @@ export default {
         this.pre_coin().then(async (pre) => {
           let next = await this.next_coin();
           if (pre * next != 0) {
-            this.TT_USDT_Rate = next / pre;
-                        // this.TT_USDT_Rate=Math.random()*1
+            this.TT_USDT_Rate = this.$usdtBig(next) / pre;
           } else this.TT_USDT_Rate = 0;
         });
       });

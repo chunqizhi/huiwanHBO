@@ -12,5 +12,11 @@ export default {
   },
   towei_fn(str){
     return Web3.utils.toWei(str,'ether')
+  },
+  usdt_tobignumber(str){
+    return (Web3.utils.toWei(str,'gwei'))/10
+  },
+  usdt_tommin(str){
+    return (Web3.utils.fromWei(str,'gwei'))/10
   }
 }

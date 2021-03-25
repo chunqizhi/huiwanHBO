@@ -54,10 +54,10 @@ import { huiwanSinglePoolAddr } from "@/apis/token.js";
 
 export default {
   name: "Home",
-  props:{
-    rate:{
-       default: 1,
-    }
+  props: {
+    rate: {
+      default: 1,
+    },
   },
   data() {
     return {
@@ -86,13 +86,13 @@ export default {
       this.usdt_total = this.usdt_total || 0;
       this.first_pool_tt = this.first_pool_tt || 0;
       let total = this.first_pool_tt + this.second_pool_tt;
-      return (total * this.rate + this.usdt_total*1).toFixed(0);
+      return (total * this.rate + this.usdt_total * 1).toFixed(0);
     },
   },
   methods: {
     init() {
-
-      cfg.initFnPromise()
+      cfg
+        .initFnPromise()
         .then((res) => {
           // 初始化拿到自己的地址
           this.account = res;
@@ -110,19 +110,22 @@ export default {
         that.token_list.mounth = that.$wei(res) * 30;
       });
       // 查询项目方 huiwanUsdtLoop 池子里面的 lp 总数量
-      cfg.getTotalSupply(function (res) {
-        console.log("当前池子 lp 总量：" + res);
-        let total = that.$wei(res);
-        that.token_list.apy =
-          ((that.token_list.day / total) * 360 * 100).toFixed(0) + "%";
-      });
+      // cfg.getTotalSupply(function (res) {
+      //   if (res * 1 == 0) {
+      //     that.token_list.apy = `0.00%`;
+      //     return;
+      //   }
+      //   let total = that.$wei(res);
+      //     that.token_list.apy =
+      //       ((that.token_list.day / total) * 360 * 100).toFixed(0) + "%";
+      // });
       that.cfg_coin_fn();
     },
     // cfg  pre_coin  next_coin   获取cfg抵押数量
     cfg_coin_fn() {
       let that = this;
       cfg.getBalanceFromHuiwanTokenContract(huiwanUsdtMdexAddr, function (res) {
-        // console.log("first pool pre_coin  " + res);
+        console.log("first pool pre_coin  " + res);
         that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(0);
         // 第一个池子的tt
         that.first_pool_tt = that.token_list.pre_coin * 1;
@@ -130,12 +133,12 @@ export default {
         cfg.getBalanceFromUsdtTokenContract(
           huiwanUsdtMdexAddr,
           function (result) {
-            // console.log("first pool next_coin  " + result);
+            console.log("first pool next_coin  " + result);
             result = result * 1 > 0 ? result : 0;
-
-            that.token_list.next_coin = (that.$wei(result) * 2).toFixed(0);
+            // usdt  10个 0
+            that.token_list.next_coin = (that.$usdtMin(result) * 2).toFixed(0);
             //第一个矿池的USDT
-            that.usdt_total =  (that.$wei(result) * 1).toFixed(0);
+            that.usdt_total = (that.$usdtMin(result) * 1).toFixed(0);
           }
         );
       });
@@ -144,7 +147,7 @@ export default {
       this.cfg_coin_fn();
       this.lp_coin_timer && clearTimeout(this.lp_coin_timer);
       this.lp_coin_timer = setTimeout(() => {
-        this.cfg_coin_timer();
+        // this.cfg_coin_timer();
       }, 2000);
     },
     choose_click(path) {
@@ -164,8 +167,11 @@ export default {
         that.token_list.mounth = that.$wei(res) * 30;
         // 拿到总收益
         cfg.getTotalSupply(function (result) {
+          if (result * 1 == 0) {
+            that.token_list.apy = `0.00%`;
+            return;
+          }
           let total = that.$wei(result);
-
           that.token_list.apy =
             ((that.token_list.day / total) * 360 * 100).toFixed(2) + "%";
 
