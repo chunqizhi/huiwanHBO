@@ -51,13 +51,13 @@ export default {
   data() {
     return {
       token_list: {
-        coin: "TT",
+        coin: "BSA",
         day: "",
         mounth: "",
-        query: "TT",
+        query: "BSA",
         pre_coin: "",
         next_coin: "",
-        coin_name: "TT",
+        coin_name: "BSA",
         apy: "",
       },
       tt_timer: null,

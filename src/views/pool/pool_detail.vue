@@ -428,9 +428,9 @@ export default {
   },
   created() {
     this.current_pool_name = this.$route.query.token;
-    if (this.$route.query.token == "TT-USDT_LP") {
+    if (this.$route.query.token == "BSA-USDT_LP") {
       this.current_pool = cfg;
-    } else if (this.$route.query.token == "TT") {
+    } else if (this.$route.query.token == "BSA") {
       this.current_pool = spg;
     }
     this.test_fn().then(() => {

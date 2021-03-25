@@ -5,7 +5,7 @@
         <!-- {{ $t("pool.text01") }}0.00 USDT -->
         <div class="all-desc">
           <div class="all-text">
-            {{ $t("pool.text01") }}: USDT:{{ calc_total }}
+            {{ $t("pool.text01") }}USDT:{{ calc_total }}
           </div>
         </div>
       </div>
@@ -62,13 +62,13 @@ export default {
   data() {
     return {
       token_list: {
-        coin: "TT-USDT_LP",
+        coin: "BSA-USDT_LP",
         day: "",
         mounth: "",
-        query: "TT-USDT_LP",
+        query: "BSA-USDT_LP",
         pre_coin: "",
         next_coin: "",
-        coin_name: "TT",
+        coin_name: "BSA",
         apy: "",
       },
 
