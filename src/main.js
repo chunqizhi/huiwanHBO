@@ -14,7 +14,6 @@ Vue.config.productionTip = false
 Vue.prototype.$wei=utils.wei_fn
 Vue.prototype.$toWei = utils.towei_fn
 
-import './apis/index'
 import {
   Toast,
   Dialog,

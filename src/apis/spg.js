@@ -4,7 +4,7 @@ import {
     usdtTokenAddr,
     huiwanUsdtMdexAddr,
     huiwanSinglePoolAddr
-} from './addr/spg.js'
+} from './token.js'
 
 // huiwanUsdtLoopABI
 import huiwanUsdtLoopABI from "@/apis/abi/huiwanUsdtLoop.abi";
@@ -22,7 +22,7 @@ import huiwanUsdtMdexABI from "@/apis/abi/huiwanUsdtMdex.abi";
 import huiwanSinglePoolABI from "@/apis/abi/huiwanUsdtLoop.abi";
 // 
 
-import Contract from './_index.js'
+import Contract from './contract/spg.js'
 
 export default new Contract({
     huiwanUsdtLoopAddr,
