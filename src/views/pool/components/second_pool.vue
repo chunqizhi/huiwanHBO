@@ -17,8 +17,7 @@
             </div>
 
             <div class="token-coin">
-              <h4>{{ $t("pool.text17") }}</h4>
-              <span>{{ token_list.pre_coin }} {{ token_list.coin_name }}</span
+              <span>{{ token_list.pre_coin }} USDT</span
               ><br />
             </div>
 
@@ -40,11 +39,15 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import spg from "@/apis/spg.js";
 import { huiwanSinglePoolAddr } from "@/apis/addr/spg.js";
 export default {
   name: "Home",
+  props: {
+    rate: {
+      default: 0,
+    },
+  },
   data() {
     return {
       token_list: {
@@ -95,8 +98,8 @@ export default {
         that.calc_lp_rate_year();
         // 查询 mdex 中配对合约拥有 huiwanToken 的数量
         spg.getTotalSupply(function (res) {
-          console.log("next_coin00", res);
-          that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(2);
+
+          that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(0);
         });
 
         // 查询 mdex 中配对合约拥有 usdtToken 的数量
@@ -106,7 +109,7 @@ export default {
             that.token_list.next_coin = that.$wei(res);
           }
         );
-        that.calc_timer()
+        that.calc_timer();
       });
     },
     // 计算年利率以及每天每日的收益
@@ -119,14 +122,14 @@ export default {
       spg.getTotalSupply(function (res) {
         // console.log("pre_coin  " + res);
         let total = that.$wei(res);
-        that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(2);
+        that.token_list.pre_coin = (that.$wei(res) * that.rate).toFixed(0);
         if (total == 0) {
           that.token_list.apy = `0.00%`;
           return;
         }
         that.token_list.apy =
           ((that.token_list.day / total) * 360 * 100).toFixed(2) + "%";
-            // console.log("apy  " +     that.token_list.apy);
+        // console.log("apy  " +     that.token_list.apy);
       });
     },
     calc_timer() {
@@ -140,7 +143,9 @@ export default {
   created() {
     this.spg_init();
   },
-  mounted() {},
+  mounted() {
+    console.log(this.rate)
+  },
   beforeDestroy() {
     this.tt_timer && clearTimeout(this.tt_timer);
   },

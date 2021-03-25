@@ -134,25 +134,25 @@ export default {
     },
   },
   watch: {
-    value1(current, pre) {
-      switch (this.current_type) {
-        case "withdraw":
-          if (current * 1 >= this.pool_un_value * 1) {
-            this.value1 = this.pool_un_value;
-          }
-          this.pool_deal_value = this.$toWei(this.value1);
-          break;
-        // 抵押
-        case "stake":
-          if (current * 1 >= this.mdex_un_value * 1) {
-            this.value1 = this.mdex_un_value;
-          }
-          // value1
-          this.mdex_deal_value = this.$toWei(this.value1);
-          // this.mdex_deal_value = this.value1;
-          break;
-      }
-    },
+    // value1(current, pre) {
+    //   switch (this.current_type) {
+    //     case "withdraw":
+    //       if (current * 1 >= this.pool_un_value * 1) {
+    //         this.value1 = this.pool_un_value;
+    //       }
+    //       this.pool_deal_value = this.$toWei(this.value1);
+    //       break;
+    //     // 抵押
+    //     case "stake":
+    //       if (current * 1 >= this.mdex_un_value * 1) {
+    //         this.value1 = this.mdex_un_value;
+    //       }
+    //       // value1
+    //       this.mdex_deal_value = this.$toWei(this.value1);
+    //       // this.mdex_deal_value = this.value1;
+    //       break;
+    //   }
+    // },
   },
   methods: {
     //  获取所有token/解押点击
@@ -294,17 +294,21 @@ export default {
     // 确认解押
     withdraw_fn() {
       let _this = this;
-      if (isNaN(_this.pool_deal_value)) {
+      if (isNaN(_this.value1)) {
         _this.$toast(_this.$t("tips.tips01"));
         _this.value1 = 0;
         return;
       }
-      if (_this.pool_deal_value == 0) {
+      if (_this.value1 == 0) {
         _this.$toast(_this.$t("tips.tips02"));
         return;
       }
+      if (_this.value1 * 1 > _this.pool_un_value * 1) {
+        _this.$toast(_this.$t("tips.tips01"));
+        return;
+      }
       _this.current_pool.withdrawFromHuiwanUsdtLoopContract(
-        _this.pool_deal_value,
+        _this.$toWei(_this.value1),
         function (res) {
           if (res) {
             _this.check_deal(res);
@@ -318,17 +322,21 @@ export default {
     // 确认抵押
     stake_fn() {
       let _this = this;
-      if (isNaN(_this.mdex_deal_value)) {
+      if (isNaN(_this.value1)) {
         _this.$toast(_this.$t("tips.tips01"));
         _this.value1 = 0;
         return;
       }
-       if (_this.mdex_deal_value == 0) {
+      if (_this.value1 == 0) {
         _this.$toast(_this.$t("tips.tips02"));
         return;
       }
+      if (_this.value1 * 1 > _this.mdex_un_value * 1) {
+        _this.$toast(_this.$t("tips.tips01"));
+        return;
+      }
       _this.current_pool.stakingToHuiwanUsdtLoopContract(
-        _this.mdex_deal_value,
+       _this.$toWei(_this.value1),
         function (res) {
           if (res) {
             _this.check_deal(res);

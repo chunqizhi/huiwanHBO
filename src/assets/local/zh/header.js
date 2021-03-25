@@ -5,7 +5,6 @@ export default  {
     nav03:'应用',
     nav04:'审计',
     nav05:'菜单',
-    desc01:'通过质押HSwap LP和Tokens赚取TT Tokens',
-    desc02:'',
-
+    desc01:'BlockChain Search Artifacts 创新型智能搜索引擎。',
+    desc02:'BlockChain Search Artifacts 创新型智能搜索引擎。存BSA赚取更多代币',
 }

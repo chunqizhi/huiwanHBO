@@ -5,5 +5,6 @@ export default  {
     nav03:'Application',
     nav04:'Audit',
     nav05:'Mune',
-    desc01:'Earn TT tokens by staking HSwap LP & Tokens',
+    desc01:'BlockChain Search Artifacts is an innovative intelligent search engine.',
+    desc02:'BlockChain Search Artifacts is an innovative intelligent search engine. Deposit BSA to earn more tokens'
 }

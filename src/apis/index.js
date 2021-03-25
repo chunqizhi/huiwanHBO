@@ -289,6 +289,21 @@ class Contract {
         );
     }
 
+    // init 进一步封装
+
+    initFnPromise(){
+        return new Promise((resolve,reject)=>{
+            this.init((res)=>{
+                if(res){
+                    resolve(res) 
+                }
+                else{
+                    reject('error')
+                }
+            })
+        })
+    }
+
 
 }
 

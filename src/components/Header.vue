@@ -29,7 +29,7 @@
       </li>
       <li class="nav-li list-li lang-btn" @click="lang_click">CN/EN</li>
     </ul>
-    <div class="header-desc">{{ $t("header.desc01") }}</div>
+    <div class="header-desc">{{ $t(current_desc) }}</div>
   </div>
 </template>
 
@@ -55,18 +55,20 @@ export default {
           path: "/info",
         },
       ],
-      current_router: "",
       mune_flag: false,
-      pool_desc: {
-        "/pool_detail": "header.desc01",
-        "/pool_index": "header.desc02",
-      },
       account: "",
+      current_desc:'header.desc01'
     };
   },
   watch: {
     $route(to, from) {
       this.current_router = to.path;
+      if(to.path.indexOf('pool')>0){
+        this.current_desc='header.desc02'
+      }
+      else{
+         this.current_desc='header.desc01'
+      }
       console.log(to.path);
     },
   },

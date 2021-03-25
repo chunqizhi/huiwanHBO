@@ -25,9 +25,6 @@
             </div>
 
             <div class="token-coin">
-              <h4>{{ $t("pool.text06") }}</h4>
-              <span>{{ token_list.pre_coin }} {{ token_list.coin_name }}</span
-              ><br />
               <span> {{ token_list.next_coin || "0.0000" }} USDT</span>
             </div>
 
@@ -57,6 +54,11 @@ import { huiwanSinglePoolAddr } from "@/apis/addr/spg.js";
 
 export default {
   name: "Home",
+  props:{
+    rate:{
+       default: 1,
+    }
+  },
   data() {
     return {
       token_list: {
@@ -73,7 +75,6 @@ export default {
       lp_timer: null,
       lp_coin_timer: null, //币对抵押数量定时器
 
-      tt_usdt_rate: 0, // 1TT=?USDT
       first_pool_tt: 0,
       second_pool_tt: 0,
       usdt_total: 0,
@@ -83,15 +84,15 @@ export default {
   computed: {
     calc_total() {
       this.usdt_total = this.usdt_total || 0;
-      this.tt_usdt_rate = this.tt_usdt_rate || 0;
       this.first_pool_tt = this.first_pool_tt || 0;
       let total = this.first_pool_tt + this.second_pool_tt;
-      return (total * this.tt_usdt_rate + this.usdt_total * 1).toFixed(2);
+      return (total * this.rate + this.usdt_total*1).toFixed(0);
     },
   },
   methods: {
     init() {
-      this.cfg_init_fn()
+
+      cfg.initFnPromise()
         .then((res) => {
           // 初始化拿到自己的地址
           this.account = res;
@@ -99,17 +100,6 @@ export default {
           this.get_second_tt();
         })
         .catch((err) => {});
-    },
-    cfg_init_fn() {
-      return new Promise((resolve, reject) => {
-        cfg.init((res) => {
-          if (res) {
-            resolve(res);
-          } else {
-            reject("err");
-          }
-        });
-      });
     },
     // init成功后的callback
     cfg_init_callback() {
@@ -124,7 +114,7 @@ export default {
         console.log("当前池子 lp 总量：" + res);
         let total = that.$wei(res);
         that.token_list.apy =
-          ((that.token_list.day / total) * 360 * 100).toFixed(2) + "%";
+          ((that.token_list.day / total) * 360 * 100).toFixed(0) + "%";
       });
       that.cfg_coin_fn();
     },
@@ -133,7 +123,7 @@ export default {
       let that = this;
       cfg.getBalanceFromHuiwanTokenContract(huiwanUsdtMdexAddr, function (res) {
         // console.log("first pool pre_coin  " + res);
-        that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(2);
+        that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(0);
         // 第一个池子的tt
         that.first_pool_tt = that.token_list.pre_coin * 1;
         // 查询 mdex 中配对合约拥有 usdtToken 的数量
@@ -143,16 +133,9 @@ export default {
             // console.log("first pool next_coin  " + result);
             result = result * 1 > 0 ? result : 0;
 
-            that.token_list.next_coin = (that.$wei(result) * 1).toFixed(2);
+            that.token_list.next_coin = (that.$wei(result) * 2).toFixed(0);
             //第一个矿池的USDT
-            that.usdt_total = that.token_list.next_coin * 1;
-            // 汇率
-            if (that.token_list.pre_coin * 1 > 0) {
-              that.tt_usdt_rate =
-                that.token_list.next_coin / that.token_list.pre_coin;
-            } else {
-              that.tt_usdt_rate = 0;
-            }
+            that.usdt_total =  (that.$wei(result) * 1).toFixed(0);
           }
         );
       });
@@ -203,7 +186,7 @@ export default {
       let that = this;
       spg.init(() => {
         spg.getTotalSupply(function (res) {
-          that.second_pool_tt = (that.$wei(res) * 1).toFixed(2) * 1;
+          that.second_pool_tt = (that.$wei(res) * 1).toFixed(0) * 1;
         });
       });
     },
