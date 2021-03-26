@@ -12,7 +12,8 @@ import FirstPool from "./components/first_pool.vue";
 import SecondPool from "./components/second_pool.vue";
 
 import cfg from "@/apis/cfg.js";
-import { huiwanUsdtMdexAddr } from "@/apis/token.js";
+import { huiwanUsdtMdexAddr, contractType } from "@/apis/token.js";
+
 export default {
   name: "Pool",
   components: {
@@ -30,8 +31,18 @@ export default {
       cfg.initFnPromise().then((data) => {
         this.pre_coin().then(async (pre) => {
           let next = await this.next_coin();
+          console.log(pre,next)
           if (pre * next != 0) {
-            this.TT_USDT_Rate = this.$usdtBig(next) / pre;
+            switch (contractType) {
+              case "okex":
+                this.TT_USDT_Rate = this.$usdtBig(next) / pre;
+                break;
+              case "ttex":
+                this.TT_USDT_Rate = next / pre;
+                break;
+              default:
+                console.log(123123);
+            }
           } else this.TT_USDT_Rate = 0;
         });
       });

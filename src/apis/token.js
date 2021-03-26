@@ -1,5 +1,13 @@
 
-// // huiwanToken 合约地址   公共
+// 用于判断USDT精确度
+export const  contractType = `okex`      //10个0
+// 
+// export const  contractType = `ttex`      //18个0
+// export const  contractType = `okex`      //10个0
+
+
+
+// huiwanToken 合约地址   公共
 // export const huiwanTokenAddr = "0x5bd9449e5Ce416959882589bBcf99Dec695f1Ecd";
 
 // // usdtToken 合约地址   公共 

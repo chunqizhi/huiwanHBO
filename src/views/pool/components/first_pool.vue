@@ -47,7 +47,7 @@
 
 <script>
 import cfg from "@/apis/cfg.js";
-import { huiwanUsdtMdexAddr } from "@/apis/token.js";
+import { huiwanUsdtMdexAddr, contractType } from "@/apis/token.js";
 
 import spg from "@/apis/spg.js";
 import { huiwanSinglePoolAddr } from "@/apis/token.js";
@@ -136,9 +136,22 @@ export default {
             console.log("first pool next_coin  " + result);
             result = result * 1 > 0 ? result : 0;
             // usdt  10个 0
-            that.token_list.next_coin = (that.$usdtMin(result) * 2).toFixed(0);
+            // contractType
+            switch (contractType) {
+              case "okex":
+                that.token_list.next_coin = (that.$usdtMin(result) * 2).toFixed(0);
+                that.usdt_total = (that.$usdtMin(result) * 1).toFixed(0);
+                break;
+              case "ttex":
+                that.token_list.next_coin = (that.$wei(result) * 2).toFixed(0);
+                that.usdt_total = (that.$wei(result) * 1).toFixed(0);
+                break;
+              default:
+                console.log(123123);
+            }
+          
             //第一个矿池的USDT
-            that.usdt_total = (that.$usdtMin(result) * 1).toFixed(0);
+           
           }
         );
       });
