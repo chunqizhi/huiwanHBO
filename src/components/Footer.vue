@@ -29,7 +29,7 @@ export default {
         },
         {
           text: "Telegram",
-          url: "",
+          url: "https://t.me/BSA8000",
         },
         {
           text: "Whitepapers",
@@ -40,6 +40,10 @@ export default {
   },
   methods: {
     item_click(item) {
+      if (item.text == "Whitepapers") {
+        this.$router.push("/pdf");
+        return;
+      }
       item.url && window.open(item.url);
     },
   },

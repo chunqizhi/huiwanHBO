@@ -5,6 +5,7 @@ const Home = () => import('../views/home/home.vue') //首页
 const PoolIndex = () => import('../views/pool/pool.vue')   //矿池首页
 const PoolDetail =() =>import('../views/pool/pool_detail.vue')   //矿池详情
 const Info = () => import('../views/info/info.vue')  //信息
+const Pdf  = () => import('../views/pdf/pdf.vue')  //PDF
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,11 @@ const routes = [
 		name: 'Info',
 		component: Info,
 	},
+	{
+		path: '/pdf',
+		name: 'Pdf',
+		component: Pdf,	
+	}
 ]
 
 const router = new VueRouter({
