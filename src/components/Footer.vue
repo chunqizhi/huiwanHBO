@@ -40,10 +40,10 @@ export default {
   },
   methods: {
     item_click(item) {
-      if (item.text == "Whitepapers") {
-        this.$router.push("/pdf");
-        return;
-      }
+      // if (item.text == "Whitepapers") {
+      //   this.$router.push("/pdf");
+      //   return;
+      // }
       item.url && window.open(item.url);
     },
   },
