@@ -86,6 +86,7 @@ export default {
       this.usdt_total = this.usdt_total || 0;
       this.first_pool_tt = this.first_pool_tt || 0;
       let total = this.first_pool_tt + this.second_pool_tt;
+      console.log( total, this.usdt_total,'qilwheiqwiweq')
       return (total * this.rate + this.usdt_total * 1).toFixed(0);
     },
   },
