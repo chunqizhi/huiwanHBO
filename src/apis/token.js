@@ -1,8 +1,9 @@
 
 // 用于判断USDT精确度
-export const  contractType = `okex`      //10个0
+// export const  contractType = `okex`      //10个0
 // 
-// export const  contractType = `ttex`      //18个0
+export const  contractType = `ttex`      //18个0
+
 // export const  contractType = `okex`      //10个0
 
 
@@ -24,16 +25,33 @@ export const  contractType = `okex`      //10个0
 
 
 // huiwanToken 合约地址   公共
-export const huiwanTokenAddr = "0xEa18E4D4a1ef75409423C314b682B85E18336120";
+// export const huiwanTokenAddr = "0xEa18E4D4a1ef75409423C314b682B85E18336120";
+
+// // usdtToken 合约地址   公共 
+// export const usdtTokenAddr = "0xe579156f9decc4134b5e3a30a24ac46bb8b01281";
+
+// // huiwanUsdtLoop   第一个池子 合约地址
+// export  const huiwanUsdtLoopAddr = "0x85e93AbC25A0F8a43C70da2f05ce3a5f7263A4CA";
+
+// // mdex huiwan-usdt      第一个池子  配对合约地址
+// export const huiwanUsdtMdexAddr = "0xfcb2abf2c41fa3e34386a41be654da702bfc5e86";
+
+// // 单币池 第二个池子
+// export const huiwanSinglePoolAddr = '0xf8944542225111F5D21E195d1257C5DC9f915C87'
+
+
+
+// huiwanToken 合约地址   公共
+export const huiwanTokenAddr = "0xD05D1Bc082c9AbB39C57907a73Ce1DFCC30c70A4";
 
 // usdtToken 合约地址   公共 
-export const usdtTokenAddr = "0xe579156f9decc4134b5e3a30a24ac46bb8b01281";
+export const usdtTokenAddr = "0xa71edc38d189767582c38a3145b5873052c3e47a";
 
 // huiwanUsdtLoop   第一个池子 合约地址
-export  const huiwanUsdtLoopAddr = "0x85e93AbC25A0F8a43C70da2f05ce3a5f7263A4CA";
+export  const huiwanUsdtLoopAddr = "0x49aE7072fB511DBe80B5144D50504fA08c90f80d";
 
 // mdex huiwan-usdt      第一个池子  配对合约地址
-export const huiwanUsdtMdexAddr = "0xfcb2abf2c41fa3e34386a41be654da702bfc5e86";
+export const huiwanUsdtMdexAddr = "0x9013ee42412158dac0f2ff6fcad9564484851748";
 
 // 单币池 第二个池子
-export const huiwanSinglePoolAddr = '0xf8944542225111F5D21E195d1257C5DC9f915C87'
+export const huiwanSinglePoolAddr = '0x8920b69Bce345bd8731B8B229baA7dCD7eABeac8'

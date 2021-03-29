@@ -130,6 +130,7 @@ export default {
         // 第一个池子的tt
         that.first_pool_tt = that.token_list.pre_coin * 1;
         // 查询 mdex 中配对合约拥有 usdtToken 的数量
+        
         cfg.getBalanceFromUsdtTokenContract(
           huiwanUsdtMdexAddr,
           function (result) {
@@ -185,8 +186,10 @@ export default {
             return;
           }
           let total = that.$wei(result);
-          that.token_list.apy =
-            ((that.token_list.day / total) * 360 * 100).toFixed(2) + "%";
+          // this.rate 
+          that.token_list.apy =((that.token_list.day * that.rate/ that.token_list.next_coin )*360*100).toFixed(2) + '%'
+          // that.token_list.apy =
+          //   ((that.token_list.day * that.rate/ total) * 360 * 100).toFixed(2) + "%";
 
           // console.log("first pool apy    ", that.token_list.apy);
         });

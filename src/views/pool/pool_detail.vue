@@ -133,27 +133,6 @@ export default {
       return this.$t("pool.text16");
     },
   },
-  watch: {
-    // value1(current, pre) {
-    //   switch (this.current_type) {
-    //     case "withdraw":
-    //       if (current * 1 >= this.pool_un_value * 1) {
-    //         this.value1 = this.pool_un_value;
-    //       }
-    //       this.pool_deal_value = this.$toWei(this.value1);
-    //       break;
-    //     // 抵押
-    //     case "stake":
-    //       if (current * 1 >= this.mdex_un_value * 1) {
-    //         this.value1 = this.mdex_un_value;
-    //       }
-    //       // value1
-    //       this.mdex_deal_value = this.$toWei(this.value1);
-    //       // this.mdex_deal_value = this.value1;
-    //       break;
-    //   }
-    // },
-  },
   methods: {
     //  获取所有token/解押点击
     btn_click(type) {
@@ -191,16 +170,18 @@ export default {
       }
       //
       else if (type == "reward") {
-        _this.current_pool.getReward(
-          function (res) {
-            _this.get_bonus_value_fn();
-            console.log(res, "+++++++++");
-          },
-          function (err) {
-            console.log(err);
-            _this.get_bonus_value_fn();
-          }
-        );
+        if (_this.bonus_value * 1 > 0 || _this.pool_value * 1 > 0) {
+          _this.current_pool.getReward(
+            function (res) {
+              _this.get_bonus_value_fn();
+              console.log(res, "+++++++++");
+            },
+            function (err) {
+              console.log(err);
+              _this.get_bonus_value_fn();
+            }
+          );
+        } else _this.$toast(_this.$t("tips.tips04"));
       }
     },
     //是否授权过
@@ -254,7 +235,7 @@ export default {
       _this.current_pool.getPoolLP(
         window.accountAddress,
         function (res) {
-          console.log(res,'获取抵押的LP');
+          console.log(res, "获取抵押的LP");
           if (res * 1 > 0) {
             _this.pool_value = _this.$wei(res);
             _this.pool_un_value = _this.$wei(res);
@@ -262,7 +243,7 @@ export default {
           } else _this.pool_value = "0.0000";
         },
         function () {
-          _this.get_pool_value()
+          _this.get_pool_value();
         }
       );
     },
@@ -408,14 +389,16 @@ export default {
     // 解押&获取
     all_btn_click() {
       let _this = this;
-      _this.current_pool.getExit(
-        function () {
-          _this.refresh_page_fn();
-        },
-        function () {
-          _this.refresh_page_fn();
-        }
-      );
+      if (_this.bonus_value * 1 > 0 || _this.pool_value * 1 > 0) {
+        _this.current_pool.getExit(
+          function () {
+            _this.refresh_page_fn();
+          },
+          function () {
+            _this.refresh_page_fn();
+          }
+        );
+      } else _this.$toast(_this.$t("tips.tips04"));
     },
     // 获取收益 抵押 解押
     refresh_page_fn() {
