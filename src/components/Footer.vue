@@ -29,6 +29,10 @@ export default {
         },
         {
           text: "Telegram",
+          url: "",
+        },
+        {
+          text: "Whitepapers",
           url: "http://bsa-coin.org/bsa/bsa.pdf",
         },
       ],
@@ -36,7 +40,7 @@ export default {
   },
   methods: {
     item_click(item) {
-      window.open(item.url);
+      item.url && window.open(item.url);
     },
   },
 };
