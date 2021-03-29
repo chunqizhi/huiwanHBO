@@ -17,7 +17,7 @@ Vue.prototype.$usdtBig = utils.usdt_tobignumber
 Vue.prototype.$usdtMin   = utils.usdt_tommin
 import {
   Toast,
-  Dialog,
+  Dialog
 } from "vant";
 
 Vue.use(Toast);

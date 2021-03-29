@@ -5,7 +5,7 @@
         class="footer-li"
         v-for="item in nav_list"
         :key="item.text"
-        @click="item_click(item.url)"
+        @click="item_click(item)"
       >
         {{ item.text }}
       </li>
@@ -17,24 +17,27 @@
 export default {
   data() {
     return {
+      show: true,
       nav_list: [
         {
           text: "GitHub",
-          url: "",
+          url: "https://github.com/BSA-team/BSAcontract",
         },
         {
           text: "Twitter",
-          url: "",
+          url: "https://mobile.twitter.com/Bsa38227026Bsa",
         },
         {
           text: "Telegram",
-          url: "",
+          url: "http://bsa-coin.org/bsa/bsa.pdf",
         },
       ],
     };
   },
   methods: {
-    item_click(item) {},
+    item_click(item) {
+      window.open(item.url);
+    },
   },
 };
 </script>
