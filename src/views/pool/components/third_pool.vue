@@ -91,8 +91,9 @@ export default {
           // 初始化拿到自己的地址
           this.account = res;
           this.bsv_init_callback();
-          this.get_second_tt();
+          // this.get_second_tt();
           this.calc_lp_rate_year_fn()
+           this.bsv_coin_timer(); 
         })
         .catch((err) => {});
     },
@@ -173,17 +174,20 @@ export default {
       // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
       let that = this;
       bsv.getInitreward(function (res) {
+          console.log( 'qliwhelqhwe')
+
         that.token_list.day = that.$wei(res);
         that.token_list.mounth = that.$wei(res) * 30;
         // 拿到总收益
         bsv.getTotalSupply(function (result) {
-          if (result * 1 == 0) {
+          if (result * 1 == 0||that.token_list.pre_coin==0) {
             that.token_list.apy = `0.00%`;
             return;
           }
           let total = that.$wei(result);
           // this.rate 
           that.token_list.apy =((that.token_list.day * that.rate/ that.token_list.pre_coin )*360*100).toFixed(2) + '%'
+
           // that.token_list.apy =
           //   ((that.token_list.day * that.rate/ total) * 360 * 100).toFixed(2) + "%";
 
@@ -194,20 +198,21 @@ export default {
     // 定时器 查询 LP年利率
     calc_lp_rate_year_fn() {
       this.calc_lp_rate_year();
+      console.log(123123)
       this.lp_timer && clearTimeout(this.lp_timer);
       this.lp_timer = setTimeout(() => {
         this.calc_lp_rate_year_fn();
-      }, 1000);
+      }, 3000);
     },
     // 获取第二个pool的TT数量
-    get_second_tt() {
-      let that = this;
-      spg.init(() => {
-        spg.getTotalSupply(function (res) {
-          that.second_pool_tt = (that.$wei(res) * 1).toFixed(0) * 1;
-        });
-      });
-    },
+    // get_second_tt() {
+    //   let that = this;
+    //   spg.init(() => {
+    //     spg.getTotalSupply(function (res) {
+    //       that.second_pool_tt = (that.$wei(res) * 1).toFixed(0) * 1;
+    //     });
+    //   });
+    // },
   },
   created() {
     this.init();
@@ -215,8 +220,8 @@ export default {
   mounted() {
     this.$nextTick(() => {
       // this.calc_lp_rate_year_fn(); // 年利率
-      this.bsv_coin_timer(); //抵押币对数量
-      this.get_second_tt(); //第二个矿池的TT
+     //抵押币对数量
+      // this.get_second_tt(); //第二个矿池的TT
     });
   },
   beforeDestroy() {
