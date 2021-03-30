@@ -66,10 +66,10 @@ export const huiwanTokenAddr = "0x3eF3A1F98ED9afC9EeE8C23Ed8F46C2708eF427C";
 export const usdtTokenAddr = "0xa71edc38d189767582c38a3145b5873052c3e47a";
 
 // huiwanUsdtLoop   第一个池子 合约地址
-export  const huiwanUsdtLoopAddr = "0xe7DC285415DbEF72ac078364ba1f372e2B281b07";
+export  const huiwanUsdtLoopAddr = "0xb5509791eA8730F2628bb84427e5E2826FCc45A8";
 
 // mdex huiwan-usdt      第一个池子  配对合约地址
-export const huiwanUsdtMdexAddr = "0x2a859e506e44427798d8d7770a0107281346ee66";
+export const huiwanUsdtMdexAddr = "0x949102338A4810c6BD6B75a1d633F803bfAC5055";
 
 // 单币池 第二个池子
 export const huiwanSinglePoolAddr = '0x56E8a72bfCEF4c7d2eA2dF0a60bd2fad48Bb298b'

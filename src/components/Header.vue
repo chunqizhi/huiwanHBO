@@ -4,7 +4,7 @@
       <img src="@assets/image/icon.png" alt="" class="header-logo" />
       <span class="header-title">Search Artifacts</span>
       <ul class="list-ul">
-        <li class="btn-li list-li">{{ $t("header.nav04") }}</li>
+        <li class="btn-li list-li" @click="open_url">{{ $t("header.nav04") }}</li>
         <li class="btn-li list-li">{{ account }}</li>
         <li class="btn-li list-li" @click="show_mune">
           {{ $t("header.nav05") }}
@@ -95,6 +95,11 @@ export default {
         _this.account = `${pre}...${next}`;
       });
     },
+    // 
+    open_url(){
+      let url = `https://bsa-coin.org/bsa/audit.pdf`
+      window.open(url)
+    }
   },
   mounted() {
     this.init();
