@@ -92,6 +92,7 @@ export default {
           this.account = res;
           this.bsv_init_callback();
           this.get_second_tt();
+          this.calc_lp_rate_year_fn()
         })
         .catch((err) => {});
     },
@@ -121,7 +122,7 @@ export default {
 
       bsv.getBalanceFromHuiwanTokenContract(huiwanHTMdexAddr, function (res) {
         console.log("BSA " + res);
-        that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(0)*2*that.rate;
+        that.token_list.pre_coin = (that.$wei(res) * 1*that.rate*2).toFixed(0);
         // 第一个池子的tt
         that.first_pool_tt = that.token_list.pre_coin * 1;
         // 查询 mdex 中配对合约拥有 usdtToken 的数量
@@ -176,7 +177,6 @@ export default {
         that.token_list.mounth = that.$wei(res) * 30;
         // 拿到总收益
         bsv.getTotalSupply(function (result) {
-          console.log(result,'qwlehlhejklqh')
           if (result * 1 == 0) {
             that.token_list.apy = `0.00%`;
             return;
@@ -214,7 +214,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.calc_lp_rate_year_fn(); // 年利率
+      // this.calc_lp_rate_year_fn(); // 年利率
       this.bsv_coin_timer(); //抵押币对数量
       this.get_second_tt(); //第二个矿池的TT
     });
