@@ -2,6 +2,10 @@
   <div class="home-div">
     <!-- TT-USDT_LP 矿池 -->
     <FirstPool :rate="TT_USDT_Rate" />
+
+    <!--  -->
+    <ThirdPool :rate="TT_USDT_Rate"/>
+
     <!-- TT 矿池 -->
     <SecondPool :rate="TT_USDT_Rate" />
   </div>
@@ -10,8 +14,10 @@
 <script>
 import FirstPool from "./components/first_pool.vue";
 import SecondPool from "./components/second_pool.vue";
+import ThirdPool from   './components/third_pool.vue'
 
 import cfg from "@/apis/cfg.js";
+
 import { huiwanUsdtMdexAddr, contractType } from "@/apis/token.js";
 
 export default {
@@ -19,6 +25,7 @@ export default {
   components: {
     FirstPool,
     SecondPool,
+    ThirdPool
   },
   data() {
     return {

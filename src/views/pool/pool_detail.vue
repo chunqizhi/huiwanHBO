@@ -98,6 +98,7 @@
 <script>
 import cfg from "@/apis/cfg.js";
 import spg from "@/apis/spg.js";
+import bsv from "@/apis/bsv.js";
 export default {
   data() {
     return {
@@ -120,6 +121,7 @@ export default {
       current_type: "withdraw",
       timer: null, //查询收益余额定时器
       deal_timer: null, //查询交易定时器
+      staked_timer: null, //查询抵押定时器
 
       current_pool: null,
       current_pool_name: "",
@@ -141,9 +143,10 @@ export default {
       if (type == "mask") {
         if (this.staked_flag) {
           // 有抵押的LP
-          if (this.pool_un_value * 1 > 0) {
+          if (this.pool_value * 1 > 0) {
             this.mask_flag = true;
           }
+           this.$toast(this.$t("tips.tips01"));
           this.current_type = "withdraw"; //当前状态为解押
           return;
         } else {
@@ -240,12 +243,25 @@ export default {
             _this.pool_value = _this.$wei(res);
             _this.pool_un_value = _this.$wei(res);
             _this.pool_deal_value = res;
-          } else _this.pool_value = "0.0000";
+          } else {
+            _this.pool_value = "0.0000";
+            // _this.value1 ="0"
+          }
         },
         function () {
           _this.get_pool_value();
         }
       );
+    },
+    // 获取抵押的LPFn
+    get_pool_value_fn() {
+      this.staked_timer && clearTimeout(this.staked_timer);
+      this.get_pool_value();
+      this.get_un_lp()
+      // this.get_bonus_value()
+      this.staked_timer = setTimeout(() => {
+        this.get_pool_value_fn();
+      }, 2000);
     },
     // 全部抵押/解押
     all_staked() {
@@ -311,7 +327,7 @@ export default {
         _this.value1 = 0;
         return;
       }
-      if (_this.value1 == 0) {
+      if (_this.value1*1 == 0) {
         _this.$toast(_this.$t("tips.tips02"));
         return;
       }
@@ -392,6 +408,7 @@ export default {
       if (_this.bonus_value * 1 > 0 || _this.pool_value * 1 > 0) {
         _this.current_pool.getExit(
           function () {
+            _this.value1="0"
             _this.refresh_page_fn();
           },
           function () {
@@ -413,16 +430,20 @@ export default {
       this.current_pool = cfg;
     } else if (this.$route.query.token == "BSA") {
       this.current_pool = spg;
+    } else if (this.$route.query.token == "BSA-HT-LP") {
+      this.current_pool = bsv;
     }
     this.test_fn().then(() => {
       this.calc_staked_flag();
       this.refresh_page_fn();
+      this.get_pool_value_fn()
     });
   },
   mounted() {},
   beforeDestroy() {
     this.timer && clearTimeout(this.timer);
     this.deal_timer && clearTimeout(this.deal_timer);
+    this.staked_timer && clearTimeout(this.staked_timer);
   },
 };
 </script>
