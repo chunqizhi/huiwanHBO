@@ -1,7 +1,7 @@
 <template>
   <div class="home-div">
     <!-- TT-USDT_LP 矿池 -->
-    <FirstPool :rate="TT_USDT_Rate"  :HBOtotal="HBO_total"/>
+    <FirstPool :rate="TT_USDT_Rate" :HBOtotal="HBO_total" />
 
     <!--  -->
     <ThirdPool :rate="TT_USDT_Rate" />
@@ -10,7 +10,7 @@
     <SecondPool :rate="TT_USDT_Rate" />
 
     <!--    -->
-    <FourthPool :rate="HBO_USDT_Rate"  :tt_rate="TT_USDT_Rate"/>
+    <FourthPool :rate="HBO_USDT_Rate" :tt_rate="TT_USDT_Rate" />
   </div>
 </template>
 
@@ -69,9 +69,10 @@ export default {
     timer_fn() {
       this.timer && clearTimeout(this.timer);
       this.get_rate();
+      this.get_HBO_rate();
       this.timer = setTimeout(() => {
         this.timer_fn();
-      }, 5000);
+      }, 4000);
     },
     pre_coin() {
       return new Promise((resolve, reject) => {
@@ -109,7 +110,6 @@ export default {
   },
   mounted() {
     this.timer_fn();
-    this.get_HBO_rate();
   },
   beforeDestroy() {
     this.timer && clearTimeout(this.timer);
