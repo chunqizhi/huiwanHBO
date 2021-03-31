@@ -102,3 +102,6 @@ export const huiwanHTPoolAddr = "0x47Eed3BFBB685A48A2841a3c4Ed8f839d3638910"
 
 // HBO 代币合约地址
 export const HBOContractAddr = "0x8764bd4fcc027faf72ba83c0b2028a3bae0d2d57";
+
+// HBO 池子地址
+export const HBOPoolAddr = "0x1F823c04b9F16F3130350F7C2d174a750AcA9494";
