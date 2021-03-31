@@ -97,3 +97,8 @@ export const huiwanHTAddr = "0x5545153ccfca01fbd7dd11c0b23ba694d9509a6f"
 export const huiwanHTMdexAddr = "0x6e213bc14a5d3678cf192e94992a181454001c26"
     //  HT pool 地址
 export const huiwanHTPoolAddr = "0x47Eed3BFBB685A48A2841a3c4Ed8f839d3638910"
+
+//// 新增抵押 HBO 代币挖 BSA 代币的池子
+
+// HBO 代币合约地址
+export const HBOContractAddr = "0x8764bd4fcc027faf72ba83c0b2028a3bae0d2d57";
