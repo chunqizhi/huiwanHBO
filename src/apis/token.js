@@ -74,26 +74,37 @@ export const contractType = `ttex` //18个0
 // export const huiwanSinglePoolAddr = '0x56E8a72bfCEF4c7d2eA2dF0a60bd2fad48Bb298b'
 
 
+
+
 // huiwanToken 合约地址   公共
-export const huiwanTokenAddr = "0x3eF3A1F98ED9afC9EeE8C23Ed8F46C2708eF427C";
+export const huiwanTokenAddr = "0x8A37079c49e7aE084eb36a220756C86e101e7047";
 
 // usdtToken 合约地址   公共 
 export const usdtTokenAddr = "0xa71edc38d189767582c38a3145b5873052c3e47a";
 
 // huiwanUsdtLoop   第一个池子 合约地址
-export const huiwanUsdtLoopAddr = "0xb5509791eA8730F2628bb84427e5E2826FCc45A8";
+export const huiwanUsdtLoopAddr = "0x3F8F58FD96098966A6053AB145864303210e25B7";
 
 // mdex huiwan-usdt      第一个池子  配对合约地址
-export const huiwanUsdtMdexAddr = "0x949102338A4810c6BD6B75a1d633F803bfAC5055";
+export const huiwanUsdtMdexAddr = "0x29d6a60692faaba233e947686acf7dc5dd9c653d";
 
 // 单币池 第二个池子
-export const huiwanSinglePoolAddr = '0x56E8a72bfCEF4c7d2eA2dF0a60bd2fad48Bb298b'
+export const huiwanSinglePoolAddr = '0xee1D16F6Fb9885bDAFdC3d17570bf13E881b2c32'
 
 
 // HT addr
 export const huiwanHTAddr = "0x5545153ccfca01fbd7dd11c0b23ba694d9509a6f"
 
 // HT Mdex Addr
-export const huiwanHTMdexAddr = "0xfefd13f95fa8746788cc2d23bcf03f2fa9690676"
+export const huiwanHTMdexAddr = "0x6e213bc14a5d3678cf192e94992a181454001c26"
     //  HT pool 地址
-export const huiwanHTPoolAddr = "0x2AcF66B4D08f9b8129FF06f73f28374A0842eb97"
+export const huiwanHTPoolAddr = "0x47Eed3BFBB685A48A2841a3c4Ed8f839d3638910"
+
+//// 新增抵押 HBO 代币挖 BSA 代币的池子
+
+// HBO 代币合约地址
+export const HBOContractAddr = "0x8764bd4fcc027faf72ba83c0b2028a3bae0d2d57";
+// HBO 池子地址
+export const HBOPoolAddr = "0xfb084e40032c1F57F23dbc3133192DA66c52CA61";
+// HBO 
+export const HBOUSDTMdexAddr = "0xc189C6c138e78E8A4c1f1633E4C402e0C49a6049"

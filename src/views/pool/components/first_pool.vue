@@ -61,6 +61,9 @@ export default {
     rate: {
       default: 1,
     },
+    HBOtotal:{
+      default:0
+    }
   },
   data() {
     return {
@@ -90,8 +93,13 @@ export default {
       this.usdt_total = this.usdt_total || 0;
       this.first_pool_tt = this.first_pool_tt || 0;
       let total = this.first_pool_tt + this.second_pool_tt+this.third_pool_tt*2;
-      return (total * this.rate + this.usdt_total * 1).toFixed(0);
+      return (total * this.rate + this.usdt_total * 1+this.HBOtotal*1).toFixed(0);
     },
+  },
+  watch:{
+    HBOtotal(val,vval){
+      console.log(val,vval)
+    }
   },
   methods: {
     init() {

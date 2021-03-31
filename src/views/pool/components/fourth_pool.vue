@@ -17,8 +17,7 @@
             </div>
 
             <div class="token-coin">
-              <span>{{ token_list.pre_coin }} USDT</span
-              ><br />
+              <span>{{ token_list.pre_coin }} USDT</span><br />
             </div>
 
             <div class="choose-div percent-div">
@@ -39,8 +38,7 @@
 </template>
 
 <script>
-import spg from "@/apis/spg.js";
-// import { huiwanSinglePoolAddr } from "@/apis/token.js";
+import hbo from "@/apis/hbo.js";
 export default {
   name: "Home",
   props: {
@@ -51,19 +49,23 @@ export default {
   data() {
     return {
       token_list: {
-        coin: "BSA",
+        coin: "HBO",
         day: "",
         mounth: "",
-        query: "BSA",
+        query: "HBO",
         pre_coin: "",
         next_coin: "",
-        coin_name: "BSA",
+        coin_name: "HBO",
         apy: "",
       },
       tt_timer: null,
     };
   },
-
+  watch: {
+    rate() {
+      console.log(this.rate, "qwlekhklqwh");
+    },
+  },
   methods: {
     choose_click(path) {
       this.$router.push({
@@ -74,9 +76,9 @@ export default {
       });
     },
     // 初始化
-    spg_init_fn() {
+    hbo_init_fn() {
       return new Promise((resolve, reject) => {
-        spg.init((res) => {
+        hbo.init((res) => {
           if (res) {
             resolve(res);
           } else {
@@ -85,35 +87,36 @@ export default {
         });
       });
     },
-    spg_init() {
+    hbo_init() {
       let that = this;
-      that.spg_init_fn().then((res) => {
-        spg.getInitreward(function (res) {
-          console.log("当前奖励数量：" + res);
+      that.hbo_init_fn().then((res) => {
+        console.log(res);
+        hbo.getInitreward(function (res) {
+          console.log("当前奖励数量：666" + res);
           that.token_list.day = that.$wei(res);
           that.token_list.mounth = that.$wei(res) * 30;
         });
-
+       
         // 计算年利率
         that.calc_lp_rate_year();
         // 查询 mdex 中配对合约拥有 huiwanToken 的数量
-        spg.getTotalSupply(function (res) {
-
+        hbo.getTotalSupply(function (res) {
+          console.log(res,'getTotalSupply')
           that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(0);
         });
-      
+
         that.calc_timer();
       });
     },
     // 计算年利率以及每天每日的收益
     calc_lp_rate_year() {
       let that = this;
-      spg.getInitreward(function (res) {
+      hbo.getInitreward(function (res) {
         that.token_list.day = that.$wei(res);
         that.token_list.mounth = that.$wei(res) * 30;
       });
-      spg.getTotalSupply(function (res) {
-        // console.log("pre_coin 444 " + res);
+      hbo.getTotalSupply(function (res) {
+        console.log("pre_coin 444 " + res);
         let total = that.$wei(res);
         that.token_list.pre_coin = (that.$wei(res) * that.rate).toFixed(0);
         if (total == 0) {
@@ -134,10 +137,9 @@ export default {
     },
   },
   created() {
-    this.spg_init();
+    this.hbo_init();
   },
   mounted() {
-    console.log(this.rate)
   },
   beforeDestroy() {
     this.tt_timer && clearTimeout(this.tt_timer);

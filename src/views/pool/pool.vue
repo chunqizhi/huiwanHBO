@@ -1,36 +1,49 @@
 <template>
   <div class="home-div">
     <!-- TT-USDT_LP 矿池 -->
-    <FirstPool :rate="TT_USDT_Rate" />
+    <FirstPool :rate="TT_USDT_Rate"  :HBOtotal="HBO_total"/>
 
     <!--  -->
-    <ThirdPool :rate="TT_USDT_Rate"/>
+    <ThirdPool :rate="TT_USDT_Rate" />
 
     <!-- TT 矿池 -->
     <SecondPool :rate="TT_USDT_Rate" />
+
+    <!--    -->
+    <FourthPool :rate="HBO_USDT_Rate" />
   </div>
 </template>
 
 <script>
 import FirstPool from "./components/first_pool.vue";
 import SecondPool from "./components/second_pool.vue";
-import ThirdPool from   './components/third_pool.vue'
+import ThirdPool from "./components/third_pool.vue";
 
+import FourthPool from "./components/fourth_pool.vue";
 import cfg from "@/apis/cfg.js";
+import hbo from "@/apis/hbo.js";
+import {
+  huiwanUsdtMdexAddr,
+  contractType,
+  HBOUSDTMdexAddr,
+} from "@/apis/token.js";
 
-import { huiwanUsdtMdexAddr, contractType } from "@/apis/token.js";
+import HBOUSDTBalance from "@/apis/contract/USDTContract.js";
 
 export default {
   name: "Pool",
   components: {
     FirstPool,
     SecondPool,
-    ThirdPool
+    ThirdPool,
+    FourthPool,
   },
   data() {
     return {
       TT_USDT_Rate: 0,
       timer: null,
+      HBO_USDT_Rate: 0,
+      HBO_total: 0,
     };
   },
   methods: {
@@ -38,7 +51,7 @@ export default {
       cfg.initFnPromise().then((data) => {
         this.pre_coin().then(async (pre) => {
           let next = await this.next_coin();
-          console.log(pre,next)
+          // console.log(pre,next)
           if (pre * next != 0) {
             switch (contractType) {
               case "okex":
@@ -48,7 +61,6 @@ export default {
                 this.TT_USDT_Rate = next / pre;
                 break;
               default:
-                console.log(123123);
             }
           } else this.TT_USDT_Rate = 0;
         });
@@ -75,9 +87,29 @@ export default {
         });
       });
     },
+    //
+    get_HBO_rate() {
+      HBOUSDTBalance.getHBOUSDTBalance().then((res) => {
+        hbo.init(() => {
+          hbo.getBalanceFromHuiwanTokenContract(
+            HBOUSDTMdexAddr,
+            (result) => {
+              this.HBO_USDT_Rate = res / result;
+              hbo.getTotalSupply((total) => {
+                this.HBO_total = (
+                  this.$wei(total) * this.HBO_USDT_Rate
+                ).toFixed(0);
+              });
+            },
+            () => {}
+          );
+        });
+      });
+    },
   },
   mounted() {
     this.timer_fn();
+    this.get_HBO_rate();
   },
   beforeDestroy() {
     this.timer && clearTimeout(this.timer);

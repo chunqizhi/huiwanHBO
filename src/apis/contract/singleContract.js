@@ -1,7 +1,8 @@
 import Web3 from "web3";
 class Contract {
     constructor(options) {
-            // addr
+            console.log(options)
+                // addr
             this.huiwanTokenAddr = options.huiwanTokenAddr
             this.huiwanSinglePoolAddr = options.huiwanSinglePoolAddr
                 // 合约abi
