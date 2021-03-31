@@ -1,10 +1,10 @@
 <template>
   <div class="home-div">
     <div>
-      <div class="home-all">
-        <!-- {{ $t("pool.text01") }}0.00 USDT -->
-       
-      </div>
+<!--      <div class="home-all">-->
+<!--        &lt;!&ndash; {{ $t("pool.text01") }}0.00 USDT &ndash;&gt;-->
+<!--       -->
+<!--      </div>-->
       <div>
         <ul class="coin-ul">
           <li class="coin-li">
