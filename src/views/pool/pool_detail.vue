@@ -99,6 +99,7 @@
 import cfg from "@/apis/cfg.js";
 import spg from "@/apis/spg.js";
 import bsv from "@/apis/bsv.js";
+import hbo from "@/apis/hbo.js";
 export default {
   data() {
     return {
@@ -434,6 +435,9 @@ export default {
       this.current_pool = spg;
     } else if (this.$route.query.token == "BSA-HT-LP") {
       this.current_pool = bsv;
+    }
+    else if (this.$route.query.token =="HBO"){
+        this.current_pool = hbo;
     }
     this.test_fn().then(() => {
       this.calc_staked_flag();

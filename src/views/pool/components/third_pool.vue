@@ -1,10 +1,6 @@
 <template>
   <div class="home-div">
     <div>
-      <div class="home-all">
-        <!-- {{ $t("pool.text01") }}0.00 USDT -->
-       
-      </div>
       <div>
         <ul class="coin-ul">
           <li class="coin-li">
@@ -122,7 +118,7 @@ export default {
       let that = this;
 
       bsv.getBalanceFromHuiwanTokenContract(huiwanHTMdexAddr, function (res) {
-        console.log("BSA " + res);
+        // console.log("BSA " + res);
         that.token_list.pre_coin = (that.$wei(res) * 1*that.rate*2).toFixed(0);
         // 第一个池子的tt
         that.first_pool_tt = that.token_list.pre_coin * 1;
@@ -130,7 +126,7 @@ export default {
         bsv.getBalanceFromUsdtTokenContract(
           huiwanHTMdexAddr,
           function (result) {
-            console.log("ht  " + result);
+            // console.log("ht  " + result);
             result = result * 1 > 0 ? result : 0;
             // usdt  10个 0
             // contractType
@@ -174,7 +170,7 @@ export default {
       // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
       let that = this;
       bsv.getInitreward(function (res) {
-          console.log( 'qliwhelqhwe')
+          // console.log( 'qliwhelqhwe')
 
         that.token_list.day = that.$wei(res);
         that.token_list.mounth = that.$wei(res) * 30;
@@ -198,7 +194,7 @@ export default {
     // 定时器 查询 LP年利率
     calc_lp_rate_year_fn() {
       this.calc_lp_rate_year();
-      console.log(123123)
+      // console.log(123123)
       this.lp_timer && clearTimeout(this.lp_timer);
       this.lp_timer = setTimeout(() => {
         this.calc_lp_rate_year_fn();

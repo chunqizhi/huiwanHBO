@@ -40,7 +40,7 @@
 
 <script>
 import spg from "@/apis/spg.js";
-import { huiwanSinglePoolAddr } from "@/apis/token.js";
+// import { huiwanSinglePoolAddr } from "@/apis/token.js";
 export default {
   name: "Home",
   props: {
@@ -101,14 +101,7 @@ export default {
 
           that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(0);
         });
-
-        // 查询 mdex 中配对合约拥有 usdtToken 的数量
-        spg.getBalanceFromUsdtTokenContract(
-          huiwanSinglePoolAddr,
-          function (res) {
-            that.token_list.next_coin = that.$wei(res);
-          }
-        );
+      
         that.calc_timer();
       });
     },
@@ -120,7 +113,7 @@ export default {
         that.token_list.mounth = that.$wei(res) * 30;
       });
       spg.getTotalSupply(function (res) {
-        // console.log("pre_coin  " + res);
+        // console.log("pre_coin 444 " + res);
         let total = that.$wei(res);
         that.token_list.pre_coin = (that.$wei(res) * that.rate).toFixed(0);
         if (total == 0) {
