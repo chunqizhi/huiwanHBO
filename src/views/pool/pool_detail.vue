@@ -146,7 +146,9 @@ export default {
           if (this.pool_value * 1 > 0) {
             this.mask_flag = true;
           }
+          else{
            this.$toast(this.$t("tips.tips01"));
+          }
           this.current_type = "withdraw"; //当前状态为解押
           return;
         } else {
@@ -405,7 +407,7 @@ export default {
     // 解押&获取
     all_btn_click() {
       let _this = this;
-      if (_this.bonus_value * 1 > 0 || _this.pool_value * 1 > 0) {
+      if (_this.bonus_value * 1 > 0 && _this.pool_value * 1 > 0) {
         _this.current_pool.getExit(
           function () {
             _this.value1="0"
