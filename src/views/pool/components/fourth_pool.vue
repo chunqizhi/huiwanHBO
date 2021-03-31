@@ -45,6 +45,9 @@ export default {
     rate: {
       default: 0,
     },
+    tt_rate: {
+      default: 0,
+    },
   },
   data() {
     return {
@@ -55,15 +58,19 @@ export default {
         query: "HBO",
         pre_coin: "",
         next_coin: "",
-        coin_name: "HBO",
+        coin_name: "BSA",
         apy: "",
       },
       tt_timer: null,
     };
   },
   watch: {
-    rate() {
+    rate(val) {
       console.log(this.rate, "qwlekhklqwh");
+      this.rate = val;
+    },
+    tt_rate(val) {
+      this.tt_rate = val;
     },
   },
   methods: {
@@ -96,12 +103,12 @@ export default {
           that.token_list.day = that.$wei(res);
           that.token_list.mounth = that.$wei(res) * 30;
         });
-       
+
         // 计算年利率
         that.calc_lp_rate_year();
         // 查询 mdex 中配对合约拥有 huiwanToken 的数量
         hbo.getTotalSupply(function (res) {
-          console.log(res,'getTotalSupply')
+          console.log(res, "getTotalSupply");
           that.token_list.pre_coin = (that.$wei(res) * 1).toFixed(0);
         });
 
@@ -116,15 +123,24 @@ export default {
         that.token_list.mounth = that.$wei(res) * 30;
       });
       hbo.getTotalSupply(function (res) {
-        console.log("pre_coin 444 " + res);
+        console.log("HBO 444 " + res);
         let total = that.$wei(res);
         that.token_list.pre_coin = (that.$wei(res) * that.rate).toFixed(0);
         if (total == 0) {
           that.token_list.apy = `0.00%`;
           return;
         }
+        // console.log(
+        //   `tt_rate:${that.tt_rate} HBO_rate:${that.rate} ${
+        //     that.token_list.day * that.tt_rate
+        //   } ${total * that.rate}`
+        // );
         that.token_list.apy =
-          ((that.token_list.day / total) * 360 * 100).toFixed(2) + "%";
+          (
+            ((that.token_list.day * that.tt_rate) / (total * that.rate)) *
+            360 *
+            100
+          ).toFixed(2) + "%";
         // console.log("apy  " +     that.token_list.apy);
       });
     },
@@ -139,8 +155,7 @@ export default {
   created() {
     this.hbo_init();
   },
-  mounted() {
-  },
+  mounted() {},
   beforeDestroy() {
     this.tt_timer && clearTimeout(this.tt_timer);
   },

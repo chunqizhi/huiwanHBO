@@ -10,7 +10,7 @@
     <SecondPool :rate="TT_USDT_Rate" />
 
     <!--    -->
-    <FourthPool :rate="HBO_USDT_Rate" />
+    <FourthPool :rate="HBO_USDT_Rate"  :tt_rate="TT_USDT_Rate"/>
   </div>
 </template>
 
