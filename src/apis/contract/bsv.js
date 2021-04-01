@@ -69,6 +69,18 @@ class Contract {
         }
     }
 
+    getFiveDay(callback, errorCallBack) {
+        this.huiwanHtLoopContract.methods
+            .initreward()
+            .call(function(error, res) {
+                if (error) {
+                    errorCallBack && errorCallBack(handleError(error));
+                } else {
+                    callback && callback(res);
+                }
+            });
+    }
+
     // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
     getInitreward(callback, errorCallBack) {
         this.huiwanUsdtLoopContract.methods

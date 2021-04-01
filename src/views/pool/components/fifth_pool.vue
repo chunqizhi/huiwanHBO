@@ -38,22 +38,25 @@
 </template>
 
 <script>
-import bsv from "@/apis/bsv.js";
-import { huiwanHTMdexAddr, contractType } from "@/apis/token.js";
+import five from "@/apis/five.js";
+import { HBOUSDTMdexAddr, contractType } from "@/apis/token.js";
 export default {
   name: "Home",
   props: {
     rate: {
       default: 1,
     },
+    tt_rate: {
+      default: 0,
+    },
   },
   data() {
     return {
       token_list: {
-        coin: "BSA-HT-LP",
+        coin: "MDX-USDT-LP",
         day: "",
         mounth: "",
-        query: "BSA-HT-LP",
+        query: "MDX-USDT-LP",
         pre_coin: "",
         next_coin: "",
         coin_name: "BSA",
@@ -62,69 +65,54 @@ export default {
 
       lp_timer: null,
       lp_coin_timer: null, //币对抵押数量定时器
-
-      first_pool_tt: 0,
-      second_pool_tt: 0,
-      usdt_total: 0,
     };
   },
-
-  computed: {
-    calc_total() {
-      this.usdt_total = this.usdt_total || 0;
-      this.first_pool_tt = this.first_pool_tt || 0;
-      let total = this.first_pool_tt + this.second_pool_tt;
-      return (total * this.rate + this.usdt_total * 1).toFixed(0);
+  watch: {
+    rate(val) {
+      this.rate = val;
+    },
+    tt_rate(val) {
+      this.tt_rate = val;
     },
   },
   methods: {
     init() {
-      bsv
+      five
         .initFnPromise()
         .then((res) => {
           // 初始化拿到自己的地址
           this.account = res;
-          this.bsv_init_callback();
+          this.five_init_callback();
           // this.get_second_tt();
-          this.calc_lp_rate_year_fn()
-           this.bsv_coin_timer(); 
+          this.calc_lp_rate_year_fn();
+          this.five_coin_timer();
         })
         .catch((err) => {});
     },
     // init成功后的callback
-    bsv_init_callback() {
+    five_init_callback() {
       let that = this;
-      // 获取奖励池中每日/每月
-      bsv.getInitreward(function (res) {
+      five.getFiveDay(function (res) {
         that.token_list.day = that.$wei(res);
         that.token_list.mounth = that.$wei(res) * 30;
       });
-      // 查询项目方 huiwanUsdtLoop 池子里面的 lp 总数量
-      // bsv.getTotalSupply(function (res) {
-      //   if (res * 1 == 0) {
-      //     that.token_list.apy = `0.00%`;
-      //     return;
-      //   }
-      //   let total = that.$wei(res);
-      //     that.token_list.apy =
-      //       ((that.token_list.day / total) * 360 * 100).toFixed(0) + "%";
-      // });
-      that.bsv_coin_fn();
+      that.five_coin_fn();
     },
-    // bsv  pre_coin  next_coin   获取bsv抵押数量
-    bsv_coin_fn() {
+    // five  pre_coin  next_coin   获取five抵押数量
+    five_coin_fn() {
       let that = this;
 
-      bsv.getBalanceFromHuiwanTokenContract(huiwanHTMdexAddr, function (res) {
-        // console.log("BSA " + res);
-        that.token_list.pre_coin = (that.$wei(res) * 1*that.rate*2).toFixed(0);
+      five.getBalanceFromHuiwanTokenContract(HBOUSDTMdexAddr, function (res) {
+        console.log("BSA 66666" + res);
+        that.token_list.pre_coin = (that.$wei(res) * 1 * that.rate * 2).toFixed(
+          0
+        );
         // 第一个池子的tt
-        that.first_pool_tt = that.token_list.pre_coin * 1;
         // 查询 mdex 中配对合约拥有 usdtToken 的数量
-        bsv.getBalanceFromUsdtTokenContract(
-          huiwanHTMdexAddr,
+        five.getBalanceFromUsdtTokenContract(
+          HBOUSDTMdexAddr,
           function (result) {
-            // console.log("ht  " + result);
+            // console.log("ht  " + result);/
             result = result * 1 > 0 ? result : 0;
             // usdt  10个 0
             // contractType
@@ -139,20 +127,19 @@ export default {
                 // that.token_list.pre_coin = ()
                 break;
               default:
-                // console.log(123123);
+              // console.log(123123);
             }
-          
+
             //第一个矿池的USDT
-           
           }
         );
       });
     },
-    bsv_coin_timer() {
-      this.bsv_coin_fn();
+    five_coin_timer() {
+      this.five_coin_fn();
       this.lp_coin_timer && clearTimeout(this.lp_coin_timer);
       this.lp_coin_timer = setTimeout(() => {
-        this.bsv_coin_timer();
+        this.five_coin_timer();
       }, 2000);
     },
     choose_click(path) {
@@ -167,20 +154,33 @@ export default {
     calc_lp_rate_year() {
       // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
       let that = this;
-      bsv.getInitreward(function (res) {
-          // console.log( 'qliwhelqhwe')
+      five.getFiveDay(function (res) {
+        // console.log( 'qliwhelqhwe')
 
         that.token_list.day = that.$wei(res);
         that.token_list.mounth = that.$wei(res) * 30;
         // 拿到总收益
-        bsv.getTotalSupply(function (result) {
+        five.getTotalSupply(function (result) {
+          console.log(`that.tt_rate:${result} that.rate`);
+
           if (result * 1 == 0||that.token_list.pre_coin==0) {
             that.token_list.apy = `0.00%`;
             return;
           }
           let total = that.$wei(result);
-          // this.rate 
-          that.token_list.apy =((that.token_list.day * that.rate/ that.token_list.pre_coin )*360*100).toFixed(2) + '%'
+          // this.rate
+          that.token_list.apy =
+            (
+              ((that.token_list.day * that.tt_rate) / (total * that.rate)) *
+              360 *
+              100
+            ).toFixed(2) + "%";
+          // that.token_list.apy =
+          //   (
+          //     ((that.token_list.day * that.rate) / that.token_list.pre_coin) *
+          //     360 *
+          //     100
+          //   ).toFixed(2) + "%";
 
           // that.token_list.apy =
           //   ((that.token_list.day * that.rate/ total) * 360 * 100).toFixed(2) + "%";
@@ -212,11 +212,7 @@ export default {
     this.init();
   },
   mounted() {
-    this.$nextTick(() => {
-      // this.calc_lp_rate_year_fn(); // 年利率
-     //抵押币对数量
-      // this.get_second_tt(); //第二个矿池的TT
-    });
+    console.log(12312312);
   },
   beforeDestroy() {
     this.lp_timer && clearTimeout(this.lp_timer);

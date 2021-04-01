@@ -135,6 +135,7 @@ export default {
         //     that.token_list.day * that.tt_rate
         //   } ${total * that.rate}`
         // );
+        console.log(`that.tt_rate:${that.tt_rate} that.rate${that.rate} total${total}` )
         that.token_list.apy =
           (
             ((that.token_list.day * that.tt_rate) / (total * that.rate)) *

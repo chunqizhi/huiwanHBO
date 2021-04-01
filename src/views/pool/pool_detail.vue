@@ -100,6 +100,7 @@ import cfg from "@/apis/cfg.js";
 import spg from "@/apis/spg.js";
 import bsv from "@/apis/bsv.js";
 import hbo from "@/apis/hbo.js";
+import five from "@/apis/five.js";
 export default {
   data() {
     return {
@@ -146,9 +147,8 @@ export default {
           // 有抵押的LP
           if (this.pool_value * 1 > 0) {
             this.mask_flag = true;
-          }
-          else{
-           this.$toast(this.$t("tips.tips01"));
+          } else {
+            this.$toast(this.$t("tips.tips01"));
           }
           this.current_type = "withdraw"; //当前状态为解押
           return;
@@ -260,7 +260,7 @@ export default {
     get_pool_value_fn() {
       this.staked_timer && clearTimeout(this.staked_timer);
       this.get_pool_value();
-      this.get_un_lp()
+      this.get_un_lp();
       // this.get_bonus_value()
       this.staked_timer = setTimeout(() => {
         this.get_pool_value_fn();
@@ -330,7 +330,7 @@ export default {
         _this.value1 = 0;
         return;
       }
-      if (_this.value1*1 == 0) {
+      if (_this.value1 * 1 == 0) {
         _this.$toast(_this.$t("tips.tips02"));
         return;
       }
@@ -411,7 +411,7 @@ export default {
       if (_this.bonus_value * 1 > 0 && _this.pool_value * 1 > 0) {
         _this.current_pool.getExit(
           function () {
-            _this.value1="0"
+            _this.value1 = "0";
             _this.refresh_page_fn();
           },
           function () {
@@ -435,14 +435,15 @@ export default {
       this.current_pool = spg;
     } else if (this.$route.query.token == "BSA-HT-LP") {
       this.current_pool = bsv;
-    }
-    else if (this.$route.query.token =="MDX"){
-        this.current_pool = hbo;
+    } else if (this.$route.query.token == "MDX") {
+      this.current_pool = hbo;
+    } else if (this.$route.query.token == "MDX-USDT-LP") {
+      this.current_pool = five;
     }
     this.test_fn().then(() => {
       this.calc_staked_flag();
       this.refresh_page_fn();
-      this.get_pool_value_fn()
+      this.get_pool_value_fn();
     });
   },
   mounted() {},

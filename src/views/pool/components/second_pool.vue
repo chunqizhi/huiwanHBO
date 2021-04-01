@@ -40,7 +40,6 @@
 
 <script>
 import spg from "@/apis/spg.js";
-// import { huiwanSinglePoolAddr } from "@/apis/token.js";
 export default {
   name: "Home",
   props: {

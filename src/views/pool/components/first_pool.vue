@@ -51,6 +51,7 @@ import {
   huiwanUsdtMdexAddr,
   contractType,
   huiwanHTMdexAddr,
+  
 } from "@/apis/token.js";
 import spg from "@/apis/spg.js";
 import bsv from "@/apis/bsv.js";
@@ -61,7 +62,10 @@ export default {
     rate: {
       default: 1,
     },
-    HBOtotal:{
+    HBOtotal: {
+      default: 0,
+    },
+    FifthTptal:{
       default:0
     }
   },
@@ -84,21 +88,33 @@ export default {
       first_pool_tt: 0,
       second_pool_tt: 0,
       third_pool_tt: 0,
+      fifth_pool_tt: 0,
       usdt_total: 0,
     };
   },
 
   computed: {
     calc_total() {
+      console.log(this.FifthTptal,'this.FifthTptalthis.FifthTptal')
       this.usdt_total = this.usdt_total || 0;
       this.first_pool_tt = this.first_pool_tt || 0;
-      let total = this.first_pool_tt + this.second_pool_tt+this.third_pool_tt*2;
-      return (total * this.rate + this.usdt_total * 1+this.HBOtotal*1).toFixed(0);
+      let total =
+        this.first_pool_tt + this.second_pool_tt + this.third_pool_tt * 2;
+      return (
+        total * this.rate +
+        this.usdt_total * 1 +
+        this.HBOtotal * 1+
+        this.FifthTptal*1
+      ).toFixed(0);
     },
   },
-  watch:{
-    HBOtotal(val,vval){
-      console.log(val,vval)
+  watch: {
+    HBOtotal(val, vval) {
+      console.log(val, vval);
+      this.HBOtotal = val 
+    },
+    FifthTptal(val){
+      this.FifthTptal = val
     }
   },
   methods: {
@@ -108,7 +124,7 @@ export default {
         .then((res) => {
           // 初始化拿到自己的地址
           this.account = res;
-          this.calc_lp_rate_year_fn()
+          this.calc_lp_rate_year_fn();
           this.cfg_init_callback();
           this.get_second_tt(); //第二个矿池的TT
           this.get_third_tt(); //第三个矿池 的TT

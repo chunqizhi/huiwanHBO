@@ -1,16 +1,24 @@
 <template>
   <div class="home-div">
     <!-- TT-USDT_LP 矿池 -->
-    <FirstPool :rate="TT_USDT_Rate" :HBOtotal="HBO_total" />
-
+    <FirstPool
+      :rate="TT_USDT_Rate"
+      :HBOtotal="HBO_total"
+      key="FirstPool"
+      :FifthTptal="FifthTptal"
+    />
     <!--  -->
-    <ThirdPool :rate="TT_USDT_Rate" />
-
+    <ThirdPool :rate="TT_USDT_Rate" key="ThirdPool" />
     <!-- TT 矿池 -->
-    <SecondPool :rate="TT_USDT_Rate" />
-
+    <SecondPool :rate="TT_USDT_Rate" key="SecondPool" />
     <!--    -->
-    <FourthPool :rate="HBO_USDT_Rate" :tt_rate="TT_USDT_Rate" />
+    <FourthPool
+      :rate="HBO_USDT_Rate"
+      :tt_rate="TT_USDT_Rate"
+      key="FourthPool"
+    />
+    <!--  -->
+    <FifthPool :rate="HBO_USDT_Rate" :tt_rate="TT_USDT_Rate" key="FifthPool" />
   </div>
 </template>
 
@@ -18,10 +26,12 @@
 import FirstPool from "./components/first_pool.vue";
 import SecondPool from "./components/second_pool.vue";
 import ThirdPool from "./components/third_pool.vue";
-
 import FourthPool from "./components/fourth_pool.vue";
+import FifthPool from "./components/fifth_pool.vue";
 import cfg from "@/apis/cfg.js";
 import hbo from "@/apis/hbo.js";
+import five from "@/apis/five.js";
+
 import {
   huiwanUsdtMdexAddr,
   contractType,
@@ -29,7 +39,6 @@ import {
 } from "@/apis/token.js";
 
 import HBOUSDTBalance from "@/apis/contract/USDTContract.js";
-
 export default {
   name: "Pool",
   components: {
@@ -37,6 +46,7 @@ export default {
     SecondPool,
     ThirdPool,
     FourthPool,
+    FifthPool,
   },
   data() {
     return {
@@ -44,6 +54,7 @@ export default {
       timer: null,
       HBO_USDT_Rate: 0,
       HBO_total: 0,
+      FifthTptal: 0,
     };
   },
   methods: {
@@ -70,6 +81,7 @@ export default {
       this.timer && clearTimeout(this.timer);
       this.get_rate();
       this.get_HBO_rate();
+      this.get_fifth_total()
       this.timer = setTimeout(() => {
         this.timer_fn();
       }, 4000);
@@ -89,6 +101,23 @@ export default {
       });
     },
     //
+    get_fifth_total() {
+      five.init(() => {
+        five.getBalanceFromHuiwanTokenContract(
+          HBOUSDTMdexAddr,
+          (res) => {
+            console.log("BSA 66661116" + res);
+            this.FifthTptal = (
+              this.$wei(res) *
+              1 *
+              this.HBO_USDT_Rate *
+              2
+            ).toFixed(0);
+          },
+          (err) => {}
+        );
+      });
+    },
     get_HBO_rate() {
       HBOUSDTBalance.getHBOUSDTBalance().then((res) => {
         hbo.init(() => {
