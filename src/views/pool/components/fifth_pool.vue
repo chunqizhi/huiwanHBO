@@ -17,7 +17,7 @@
             </div>
 
             <div class="token-coin">
-              <span> {{ token_list.pre_coin || "0.0000" }} USDT</span>
+              <span> {{ fifth_total || "0.0000" }} USDT</span>
             </div>
 
             <div class="choose-div percent-div">
@@ -49,6 +49,12 @@ export default {
     tt_rate: {
       default: 0,
     },
+    fifth_total: {
+      default: 0,
+    },
+    fifth_unfixed_total: {
+      default: 0,
+    },
   },
   data() {
     return {
@@ -74,6 +80,12 @@ export default {
     tt_rate(val) {
       this.tt_rate = val;
     },
+    fifth_total(val) {
+      this.fifth_total = val;
+    },
+    fifth_unfixed_total(val) {
+      this.fifth_unfixed_total = val;
+    },
   },
   methods: {
     init() {
@@ -96,47 +108,8 @@ export default {
         that.token_list.day = that.$wei(res);
         that.token_list.mounth = that.$wei(res) * 30;
       });
-      that.five_coin_fn();
-    },
-    // five  pre_coin  next_coin   获取five抵押数量
-    five_coin_fn() {
-      let that = this;
-
-      five.getBalanceFromHuiwanTokenContract(HBOUSDTMdexAddr, function (res) {
-        console.log("BSA 66666" + res);
-        that.token_list.pre_coin = (that.$wei(res) * 1 * that.rate * 2).toFixed(
-          0
-        );
-        // 第一个池子的tt
-        // 查询 mdex 中配对合约拥有 usdtToken 的数量
-        five.getBalanceFromUsdtTokenContract(
-          HBOUSDTMdexAddr,
-          function (result) {
-            // console.log("ht  " + result);/
-            result = result * 1 > 0 ? result : 0;
-            // usdt  10个 0
-            // contractType
-            switch (contractType) {
-              case "okex":
-                // that.token_list.next_coin = (that.$usdtMin(result) * 2).toFixed(0);
-                // that.usdt_total = (that.$usdtMin(result) * 1).toFixed(0);
-                break;
-              case "ttex":
-                // that.token_list.next_coin = (that.$wei(result) * 2).toFixed(0);
-                // that.usdt_total = (that.$wei(result) * 1).toFixed(0);
-                // that.token_list.pre_coin = ()
-                break;
-              default:
-              // console.log(123123);
-            }
-
-            //第一个矿池的USDT
-          }
-        );
-      });
     },
     five_coin_timer() {
-      this.five_coin_fn();
       this.lp_coin_timer && clearTimeout(this.lp_coin_timer);
       this.lp_coin_timer = setTimeout(() => {
         this.five_coin_timer();
@@ -155,70 +128,32 @@ export default {
       // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
       let that = this;
       five.getFiveDay(function (res) {
-        // console.log( 'qliwhelqhwe')
-
         that.token_list.day = that.$wei(res);
         that.token_list.mounth = that.$wei(res) * 30;
-        // 拿到 mdex 在 usdt 合约的余额
-        five.getBalanceFromUsdtTokenContract(HBOUSDTMdexAddr,function (res) {
-          console.log(HBOUSDTMdexAddr + "=======" + res);
-        },function (err) {
-          console.log(HBOUSDTMdexAddr + "=======" + err);
-        });
-        // 拿到总收益
-        five.getTotalSupply(function (result) {
-          console.log(`that.tt_rate:${result} that.rate`);
-
-          if (result * 1 == 0||that.token_list.pre_coin==0) {
-            that.token_list.apy = `0.00%`;
-            return;
-          }
-          let total = that.$wei(result);
-          // this.rate
-          that.token_list.apy =
-            (
-              ((that.token_list.day * that.tt_rate) / (total * that.rate)) *
-              360 *
-              100
-            ).toFixed(2) + "%";
-          // that.token_list.apy =
-          //   (
-          //     ((that.token_list.day * that.rate) / that.token_list.pre_coin) *
-          //     360 *
-          //     100
-          //   ).toFixed(2) + "%";
-
-          // that.token_list.apy =
-          //   ((that.token_list.day * that.rate/ total) * 360 * 100).toFixed(2) + "%";
-
-          // console.log("first pool apy    ", that.token_list.apy);
-        });
+        // fifth_unfixed_total
+        if (that.fifth_unfixed_total == 0) {
+          that.token_list.apy = `0.00%`;
+          return;
+        }
+        that.token_list.apy =
+          (
+            ((that.token_list.day * that.tt_rate) / that.fifth_unfixed_total) *
+            360 *
+            100
+          ).toFixed(2) + "%";
       });
     },
     // 定时器 查询 LP年利率
     calc_lp_rate_year_fn() {
       this.calc_lp_rate_year();
-      // console.log(123123)
       this.lp_timer && clearTimeout(this.lp_timer);
       this.lp_timer = setTimeout(() => {
         this.calc_lp_rate_year_fn();
       }, 3000);
     },
-    // 获取第二个pool的TT数量
-    // get_second_tt() {
-    //   let that = this;
-    //   spg.init(() => {
-    //     spg.getTotalSupply(function (res) {
-    //       that.second_pool_tt = (that.$wei(res) * 1).toFixed(0) * 1;
-    //     });
-    //   });
-    // },
   },
   created() {
     this.init();
-  },
-  mounted() {
-    console.log(12312312);
   },
   beforeDestroy() {
     this.lp_timer && clearTimeout(this.lp_timer);

@@ -73,10 +73,20 @@ class Contract {
                 })
         }
     }
-
+    getFiveDay(callback, errorCallBack) {
+        this.huiwanHtLoopContract.methods
+            .initreward()
+            .call(function(error, res) {
+                if (error) {
+                    errorCallBack && errorCallBack(handleError(error));
+                } else {
+                    callback && callback(res);
+                }
+            });
+    }
 
     // 查询 mdex 中配对合约拥有 huiwanToken 的数量
-    getBalanceFromUsdtTokenContract(account, callback, errorCallBack) {
+    getBalanceFromUsdtTokenContract1(account, callback, errorCallBack) {
         this.usdtTokenContract.methods
             .balanceOf(account)
             .call(function(error, res) {
@@ -192,6 +202,17 @@ class Contract {
             });
     }
 
+    getMDXTotalSupply(callback, errorCallBack) {
+        this.huiwanTTMdexContract.methods
+            .totalSupply()
+            .call(function(error, res) {
+                if (error) {
+                    errorCallBack && errorCallBack(handleError(error));
+                } else {
+                    callback && callback(res);
+                }
+            });
+    }
 
     // 抵押 lp 到 huiwanUsdtLoop 池子
 

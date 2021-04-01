@@ -123,26 +123,21 @@ export default {
         that.token_list.mounth = that.$wei(res) * 30;
       });
       hbo.getTotalSupply(function (res) {
-        console.log("HBO 444 " + res);
+        // console.log("HBO 444 " + res);
         let total = that.$wei(res);
         that.token_list.pre_coin = (that.$wei(res) * that.rate).toFixed(0);
         if (total == 0) {
           that.token_list.apy = `0.00%`;
           return;
         }
-        // console.log(
-        //   `tt_rate:${that.tt_rate} HBO_rate:${that.rate} ${
-        //     that.token_list.day * that.tt_rate
-        //   } ${total * that.rate}`
-        // );
-        console.log(`that.tt_rate:${that.tt_rate} that.rate${that.rate} total${total}` )
+       
+        // console.log(`that.tt_rate:${that.tt_rate} that.rate${that.rate} total${total}` )
         that.token_list.apy =
           (
             ((that.token_list.day * that.tt_rate) / (total * that.rate)) *
             360 *
             100
           ).toFixed(2) + "%";
-        // console.log("apy  " +     that.token_list.apy);
       });
     },
     calc_timer() {

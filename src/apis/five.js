@@ -4,7 +4,7 @@ import {
     huiwanTokenAddr,
     // huiwanHTMdexAddr,
     // huiwanHTPoolAddr,
-
+    usdtTokenAddr,
     MDXUsdtPoolAddr,
     HBOUSDTMdexAddr
 } from './token.js'
@@ -19,6 +19,7 @@ import huiwanHTABI from "@/apis/abi/HBOToken.abi";
 
 import Contract from './contract/five.js'
 
+import usdtTokenABI from '@/apis/abi/usdtToken.abi.js'
 
 const huiwanHTMdexAddr = HBOUSDTMdexAddr
 const huiwanHTPoolAddr = MDXUsdtPoolAddr
@@ -29,5 +30,7 @@ export default new Contract({
     huiwanHTPoolAddr,
     huiwanUsdtLoopABI,
     huiwanTokenABI,
-    huiwanHTABI
+    huiwanHTABI,
+    usdtTokenABI,
+    usdtTokenAddr
 })

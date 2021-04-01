@@ -62,10 +62,10 @@ export default {
     rate: {
       default: 1,
     },
-    HBOtotal: {
+    hbo_total: {
       default: 0,
     },
-    FifthTptal:{
+    fifth_total:{
       default:0
     }
   },
@@ -95,7 +95,7 @@ export default {
 
   computed: {
     calc_total() {
-      console.log(this.FifthTptal,'this.FifthTptalthis.FifthTptal')
+      console.log(this.fifth_total,'this.fifth_totalthis.fifth_total')
       this.usdt_total = this.usdt_total || 0;
       this.first_pool_tt = this.first_pool_tt || 0;
       let total =
@@ -103,18 +103,19 @@ export default {
       return (
         total * this.rate +
         this.usdt_total * 1 +
-        this.HBOtotal * 1+
-        this.FifthTptal*1
+        this.hbo_total * 1+
+        this.fifth_total*1
       ).toFixed(0);
     },
   },
   watch: {
-    HBOtotal(val, vval) {
+    hbo_total(val, vval) {
       console.log(val, vval);
-      this.HBOtotal = val 
+      this.hbo_total = val 
     },
-    FifthTptal(val){
-      this.FifthTptal = val
+    fifth_total(val){
+      console.log(`fifth_total ${this.fifth_total}`)
+      this.fifth_total = val
     }
   },
   methods: {

@@ -3,9 +3,9 @@
     <!-- TT-USDT_LP 矿池 -->
     <FirstPool
       :rate="TT_USDT_Rate"
-      :HBOtotal="HBO_total"
+      :hbo_total="HBO_total"
       key="FirstPool"
-      :FifthTptal="FifthTptal"
+      :fifth_total="fifth_total"
     />
     <!--  -->
     <ThirdPool :rate="TT_USDT_Rate" key="ThirdPool" />
@@ -18,7 +18,12 @@
       key="FourthPool"
     />
     <!--  -->
-    <FifthPool :rate="HBO_USDT_Rate" :tt_rate="TT_USDT_Rate" key="FifthPool" />
+    <FifthPool 
+    :rate="HBO_USDT_Rate" 
+    :tt_rate="TT_USDT_Rate"
+    :fifth_unfixed_total="fifth_unfixed_total"
+    :fifth_total="fifth_total"
+     key="FifthPool" />
   </div>
 </template>
 
@@ -39,6 +44,7 @@ import {
 } from "@/apis/token.js";
 
 import HBOUSDTBalance from "@/apis/contract/USDTContract.js";
+
 export default {
   name: "Pool",
   components: {
@@ -54,7 +60,9 @@ export default {
       timer: null,
       HBO_USDT_Rate: 0,
       HBO_total: 0,
-      FifthTptal: 0,
+      fifth_total: 0,
+      fifth_unfixed_total:0
+      
     };
   },
   methods: {
@@ -81,7 +89,7 @@ export default {
       this.timer && clearTimeout(this.timer);
       this.get_rate();
       this.get_HBO_rate();
-      this.get_fifth_total()
+      this.get_fifth_total();
       this.timer = setTimeout(() => {
         this.timer_fn();
       }, 4000);
@@ -102,19 +110,23 @@ export default {
     },
     //
     get_fifth_total() {
+      let _this = this;
       five.init(() => {
-        five.getBalanceFromHuiwanTokenContract(
+        five.getBalanceFromUsdtTokenContract1(
           HBOUSDTMdexAddr,
-          (res) => {
-            console.log("BSA 66661116" + res);
-            this.FifthTptal = (
-              this.$wei(res) *
-              1 *
-              this.HBO_USDT_Rate *
-              2
-            ).toFixed(0);
+          function (res1) {
+            five.getMDXTotalSupply((res2) => {
+              five.getTotalSupply(function (result) {
+                _this.fifth_total = (
+                  _this.$wei("" + (result * res1 * 2) / res2) * 1
+                ).toFixed(0);
+                _this.fifth_unfixed_total = (
+                  _this.$wei("" + (result * res1 * 2) / res2) * 1
+                ).toFixed(2);
+              });
+            });
           },
-          (err) => {}
+          function (err) {}
         );
       });
     },
