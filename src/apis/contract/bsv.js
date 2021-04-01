@@ -5,26 +5,17 @@ class Contract {
             // addr
             this.huiwanUsdtLoopAddr = options.huiwanUsdtLoopAddr
             this.huiwanTokenAddr = options.huiwanTokenAddr
-            this.usdtTokenAddr = options.usdtTokenAddr
-            this.huiwanUsdtMdexAddr = options.huiwanUsdtMdexAddr
-
-
-            this.huiwanHTAddr = options.huiwanHTAddr
             this.huiwanHTMdexAddr = options.huiwanHTMdexAddr
             this.huiwanHTPoolAddr = options.huiwanHTPoolAddr
 
             // 合约abi
             this.huiwanUsdtLoopABI = options.huiwanUsdtLoopABI
             this.huiwanTokenABI = options.huiwanTokenABI
-            this.usdtTokenABI = options.usdtTokenABI
-            this.huiwanUsdtMdexABI = options.huiwanUsdtMdexABI
-
             this.huiwanHTABI = options.huiwanHTABI
                 // 合约对象
             this.huiwanUsdtLoopContract = null
             this.huiwanTokenContract = null
-            this.usdtTokenContract = null
-            this.huiwanTTMdexContract = null
+                // this.usdtTokenContract = null
 
             this.huiwanTTMdexContract = null
 
@@ -58,17 +49,13 @@ class Contract {
                     // 创建合约
                     //
                     _this.huiwanUsdtLoopContract = new web3.eth.Contract(_this.huiwanUsdtLoopABI, _this.huiwanUsdtLoopAddr);
+
                     //
                     _this.huiwanTokenContract = new web3.eth.Contract(_this.huiwanTokenABI, _this.huiwanTokenAddr);
-                    //
-                    _this.usdtTokenContract = new web3.eth.Contract(_this.usdtTokenABI, _this.usdtTokenAddr);
 
                     //
-                    // _this.huiwanTTMdexContract = new web3.eth.Contract(_this.huiwanUsdtMdexABI, _this.huiwanUsdtMdexAddr);
-                    //
-
                     _this.huiwanTTMdexContract = new web3.eth.Contract(_this.huiwanHTABI, _this.huiwanHTMdexAddr);
-                    //
+
                     //
                     _this.huiwanHtLoopContract = new web3.eth.Contract(_this.huiwanUsdtLoopABI, _this.huiwanHTPoolAddr);
 
@@ -148,6 +135,7 @@ class Contract {
                 }
             });
     }
+
 
     // 查询 mdex 中配对合约拥有 usdtToken 的数量
     getBalanceFromUsdtTokenContract(account, callback, errorCallBack) {
