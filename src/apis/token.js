@@ -115,3 +115,6 @@ export const HBOContractAddr = "0x25D2e80cB6B86881Fd7e07dd263Fb79f4AbE033c";
 export const HBOPoolAddr = "0x3CE993A33c6be3CF819e1DF26E15896aEfea3a42";
 // HBO
 export const HBOUSDTMdexAddr = "0x615E6285c5944540fd8bd921c9c8c56739Fd1E13"
+
+// MDX/Usdt 池子地址
+export const MDXUsdtPoolAddr = "0x43Ee559e805eC2eCFD4d2690B13Cf5Ec28F4FB25";
