@@ -52,10 +52,10 @@ export default {
   data() {
     return {
       token_list: {
-        coin: "HBO",
+        coin: "MDX",
         day: "",
         mounth: "",
-        query: "HBO",
+        query: "MDX",
         pre_coin: "",
         next_coin: "",
         coin_name: "BSA",

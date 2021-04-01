@@ -436,7 +436,7 @@ export default {
     } else if (this.$route.query.token == "BSA-HT-LP") {
       this.current_pool = bsv;
     }
-    else if (this.$route.query.token =="HBO"){
+    else if (this.$route.query.token =="MDX"){
         this.current_pool = hbo;
     }
     this.test_fn().then(() => {
