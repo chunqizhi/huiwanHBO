@@ -159,6 +159,12 @@ export default {
 
         that.token_list.day = that.$wei(res);
         that.token_list.mounth = that.$wei(res) * 30;
+        // 拿到 mdex 在 usdt 合约的余额
+        five.getBalanceFromUsdtTokenContract(HBOUSDTMdexAddr,function (res) {
+          console.log(HBOUSDTMdexAddr + "=======" + res);
+        },function (err) {
+          console.log(HBOUSDTMdexAddr + "=======" + err);
+        });
         // 拿到总收益
         five.getTotalSupply(function (result) {
           console.log(`that.tt_rate:${result} that.rate`);

@@ -7,11 +7,13 @@ class Contract {
             this.huiwanTokenAddr = options.huiwanTokenAddr
             this.huiwanHTMdexAddr = options.huiwanHTMdexAddr
             this.huiwanHTPoolAddr = options.huiwanHTPoolAddr
+            this.usdtTokenAddr = options.usdtTokenAddr
 
             // 合约abi
             this.huiwanUsdtLoopABI = options.huiwanUsdtLoopABI
             this.huiwanTokenABI = options.huiwanTokenABI
             this.huiwanHTABI = options.huiwanHTABI
+            this.usdtTokenABI = options.usdtTokenABI
                 // 合约对象
             this.huiwanUsdtLoopContract = null
             this.huiwanTokenContract = null
@@ -21,6 +23,7 @@ class Contract {
 
             this.huiwanHtLoopContract = null
                 // huiwanHTMdexContract
+            this.usdtTokenContract = null
 
         }
         // 初始化
@@ -59,6 +62,8 @@ class Contract {
                     //
                     _this.huiwanHtLoopContract = new web3.eth.Contract(_this.huiwanUsdtLoopABI, _this.huiwanHTPoolAddr);
 
+                    _this.usdtTokenContract = new web3.eth.Contract(_this.usdtTokenABI, _this.usdtTokenAddr);
+
 
                     // _this.huiwanHT
 
@@ -69,6 +74,19 @@ class Contract {
         }
     }
 
+
+    // 查询 mdex 中配对合约拥有 huiwanToken 的数量
+    getBalanceFromUsdtTokenContract(account, callback, errorCallBack) {
+        this.usdtTokenContract.methods
+            .balanceOf(account)
+            .call(function(error, res) {
+                if (error) {
+                    errorCallBack && errorCallBack(handleError(error));
+                } else {
+                    callback && callback(res);
+                }
+            });
+    }
 
     // 查询 huiwanUsdtLoop 池子初始奖励数量 57600000000000000000000
     getInitreward(callback, errorCallBack) {

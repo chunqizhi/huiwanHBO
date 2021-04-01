@@ -17,7 +17,7 @@ import huiwanTokenABI from "@/apis/abi/huiwanToken.abi";
 
 import huiwanHTABI from "@/apis/abi/HBOToken.abi";
 
-import Contract from './contract/bsv.js'
+import Contract from './contract/five.js'
 
 
 const huiwanHTMdexAddr = HBOUSDTMdexAddr
