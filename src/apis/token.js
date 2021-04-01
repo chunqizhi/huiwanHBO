@@ -102,9 +102,16 @@ export const huiwanHTPoolAddr = "0x47Eed3BFBB685A48A2841a3c4Ed8f839d3638910"
 
 //// 新增抵押 HBO 代币挖 BSA 代币的池子
 
+// // HBO 代币合约地址
+// export const HBOContractAddr = "0x8764bd4fcc027faf72ba83c0b2028a3bae0d2d57";
+// // HBO 池子地址
+// export const HBOPoolAddr = "0xfb084e40032c1F57F23dbc3133192DA66c52CA61";
+// // HBO
+// export const HBOUSDTMdexAddr = "0xc189C6c138e78E8A4c1f1633E4C402e0C49a6049"
+
 // HBO 代币合约地址
-export const HBOContractAddr = "0x8764bd4fcc027faf72ba83c0b2028a3bae0d2d57";
+export const HBOContractAddr = "0x25D2e80cB6B86881Fd7e07dd263Fb79f4AbE033c";
 // HBO 池子地址
-export const HBOPoolAddr = "0xfb084e40032c1F57F23dbc3133192DA66c52CA61";
-// HBO 
-export const HBOUSDTMdexAddr = "0xc189C6c138e78E8A4c1f1633E4C402e0C49a6049"
+export const HBOPoolAddr = "0x3CE993A33c6be3CF819e1DF26E15896aEfea3a42";
+// HBO
+export const HBOUSDTMdexAddr = "0x615E6285c5944540fd8bd921c9c8c56739Fd1E13"
